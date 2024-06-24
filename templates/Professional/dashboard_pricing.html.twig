@@ -1,0 +1,58 @@
+{% extends 'layouts/arqonz_layout.html.twig' %}
+{% do pimcore_head_link().appendStylesheet('/static/css/arqonz_Prodashboard.css') %}
+{# {% form_theme form 'bootstrap_5_layout.html.twig' %} #}
+
+
+{% block content %}
+    {% include 'Professional/dashboard_navigation.html.twig' %}
+
+    <div class="dashboard-container">
+        <div class="left-column" style="width:100%;justify-content:center;">
+            <!-- ArchitectProjects -->
+            <div class="profile-details">
+                <div class="sectionheading">
+                    <h2>Pricing</h2>
+                </div>
+                <div class="details">
+                    Buy the suitable Subscription package to Buy credits and view Leads. 
+
+                    <div id="pricingtable">
+                        <div class="subplan">
+                            <ul class="price">
+                                <li class="header">Basic</li>
+                                <li class="priceli">₹ 1000 / year</li>
+                                <li>1000 Credits/Month</li>
+                                <li><i class="fa-regular fa-hexagon-check"></i> View Leads</li>
+                                <li><i class="fa-regular fa-hexagon-check"></i> View BOQ</li>
+                                <li class="buttonli"><a href="{{ path('subscribe', {'plan': 'BasicPlan'}) }}" id="BasicPlan" class="button">Subscribe</a></li>
+                            </ul>
+                        </div>
+                        <div class="subplan featuredplan">
+                            <ul class="price">
+                                <li class="header">Economy</li>
+                                <li class="priceli">₹ 2000 / year</li>
+                                <li>2200 Credits/Month</li>
+                                <li><i class="fa-regular fa-hexagon-check"></i> View Leads</li>
+                                <li><i class="fa-regular fa-hexagon-check"></i> View BOQ</li>
+                                <li class="buttonli"><a href="{{ path('subscribe', {'plan': 'EconomyPlan'}) }}" id="EconomyPlan" class="button">Subscribe</a></li>
+                            </ul>
+                        </div>
+                        <div class="subplan">
+                            <ul class="price">
+                                <li class="header">Advanced</li>
+                                <li class="priceli">₹ 3000 / year</li>
+                                <li>3500 Credits/Month</li>
+                                <li><i class="fa-regular fa-hexagon-check"></i> View Leads</li>
+                                <li><i class="fa-regular fa-hexagon-check"></i> View BOQ</li>
+                                <li class="buttonli"><a href="{{ path('subscribe', {'plan': 'AdvancedPlan'}) }}" id="AdvancedPlan" class="button">Subscribe</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {# {{ form(form) }} #}
+                </div>
+            </div>
+        </div>
+    
+    
+{% endblock %}

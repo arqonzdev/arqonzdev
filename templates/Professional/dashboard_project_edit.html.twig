@@ -1,0 +1,37 @@
+{% extends 'layouts/arqonz_layout.html.twig' %}
+{% do pimcore_head_link().appendStylesheet('/static/css/arqonz_Prodashboard.css') %}
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{% block content %}
+    {% include 'Professional/dashboard_navigation.html.twig' %}
+
+    <div class="dashboard-container">
+        <div class="left-column" style="width: 100%; justify-content:center;">
+            <!-- ArchitectProjects -->
+            <div class="projectssection">
+                <div class="sectionheading">
+                <h2>Edit Project</h2> 
+                </div>
+                <div class="Add-project-button">
+                    {% if app.user.customertype == 'Contractor' %}
+                        <a href="/contractor/portfolio/add-project" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-plus" aria-hidden="true" style="font-size:15px;"></i> Add Project</a>
+                    {% endif %}
+                    {% if app.user.customertype == 'Designer' %}
+                        <a href="/designer/portfolio/add-project" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-plus" aria-hidden="true" style="font-size:15px;"></i> Add Project</a>
+                    {% endif %}
+                    {% if app.user.customertype == 'Architect' %}
+                        <a href="/architect/portfolio/add-project" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-plus" aria-hidden="true" style="font-size:15px;"></i> Add Project</a>
+                    {% endif %}
+                    {% if app.user.customertype == 'Builder' %}
+                        <a href="/builder/portfolio/add-project" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-plus" aria-hidden="true" style="font-size:15px;"></i> Add Project</a>
+                    {% endif %}
+                </div>
+                    <!-- ArchitectProjects -->
+                <div class="editform" style="padding:0px 20px">
+                    {{ form(form) }}
+                </div>
+            </div> 
+        </div>
+    
+    
+{% endblock %}

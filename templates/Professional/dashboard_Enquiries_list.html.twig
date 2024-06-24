@@ -1,0 +1,54 @@
+{% extends 'layouts/arqonz_layout.html.twig' %}
+{% do pimcore_head_link().appendStylesheet('/static/css/arqonz_Prodashboard.css') %}
+
+
+{% block content %}
+    {% include 'Professional/dashboard_navigation.html.twig' %}
+
+    <div class="dashboard-container">
+        <div class="left-column" style="width: 100%; justify-content:center;">
+            <!-- ArchitectProjects -->
+            <div class="projectssection">
+                <div class="sectionheading">
+                <h2>{{ customer.getcustomertype() }} Enquiries</h2> 
+                </div>
+                    <!-- ArchitectProjects -->
+                <div class="details">
+                    <div class="pro-projects">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>View</th>
+                                    <th>Unlock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ProEnquiry in ProEnquiries %}
+                                    {% if ProEnquiry.Professional == ProProfile %}
+                                        <tr>
+                                            <td><input type="checkbox"></td>
+                                            <td>
+                                                <strong>{{ ProEnquiry.getfullname() }}</strong>
+                                            </td>
+                                            <td><a href="/en/enquiry/{{ customer.getcustomertype() }}s/{{ ProEnquiry.getkey() }}">View</a></td>
+                                            {% if ProEnquiry.Unlock != 'true' %}
+                                                <td> Locked</td>
+                                            {% endif %}
+                                            {% if ProEnquiry.Unlock == 'true' %}
+                                                <td> Unlocked</td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            
+            </div> 
+        </div>
+    
+    
+{% endblock %}

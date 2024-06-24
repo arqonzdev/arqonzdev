@@ -1,0 +1,53 @@
+{% extends 'layouts/arqonz_layout.html.twig' %}
+
+{% block content %}
+
+<div class="enquirybox">
+    <div class="enquirycontent">
+        {% if Unlock != 'true'%}
+        <center><h2 class="mainheading">Enquiry Details</h2></center>
+        <p><div class="EnquiryField">Name: <span class="hiddenfield"> {{ ProEnquiry.getfullname() }}</span></div></p>
+        <p><div class="EnquiryField">Email: <span class="hiddenfield"><i class="fa-solid fa-lock-keyhole"></i></span></div></p>
+        <p><div class="EnquiryField">Phone: <span class="hiddenfield"><i class="fa-solid fa-lock-keyhole"></i> </span></div></p>
+        <p><div class="EnquiryField">Message: <span class="hiddenfield"> {{ ProEnquiry.getMessage() }}</span></div></p>
+        
+        <button id="unlockButton" class="btn btn-lg btn-block btn-success btn"><i class="fa-solid fa-lock-keyhole-open"></i> Unlock Now</button>
+        <a href="/account/pricing" id="unlockButton" class="btn btn-lg btn-block btn-success btn"><i class="fa-solid fa-coin"></i> Buy Credits</a>
+        {% endif %}
+
+        {% if Unlock == 'true'%}
+        <center><h2 class="mainheading">Enquiry Details</h2></center>
+        <p><div class="EnquiryField">Name: <span class="hiddenfield"> {{ ProEnquiry.getfullname() }}</span></div></p>
+        <p><div class="EnquiryField">Email: <span class="hiddenfield"> {{ ProEnquiry.getEmail() }}</span></div></p>
+        <p><div class="EnquiryField">Phone: <span class="hiddenfield"> {{ ProEnquiry.getPhone() }}</span></div></p>
+        <p><div class="EnquiryField">Message: <span class="hiddenfield"> {{ ProEnquiry.getMessage() }}</span></div></p>
+        {% endif %}
+        
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('unlockButton').addEventListener('click', function(e) {
+            window.location.href = "{{ path('Enquiry-page-unlock', {'enquirytype': enquirytype, 'url': url}) }}";
+        });
+    });
+</script>
+
+{% endblock %}
+
+
+
+
+{# To Display #}
+
+{# <div class="enquirybox">
+    <div class="enquirycontent">
+        <h2 class="mainheading">Enquiry Details</h2>
+        <p><div>Name: {{ProEnquiry.getfullname()}}</div></p>
+        <p><div>Email: {{ProEnquiry.getEmail()}}</div></p>
+        <p><div>Phone: {{ProEnquiry.getPhone()}}</div></p>
+        <p><div>Message: {{ProEnquiry.getMessage()}}</div></p>
+    </div>
+</div> #}

@@ -1,0 +1,50 @@
+{% extends 'layouts/arqonz_layout.html.twig' %}
+{% do pimcore_head_link().appendStylesheet('/static/css/arqonz_Prodashboard.css') %}
+
+
+{% block content %}
+    {% include 'Professional/dashboard_navigation.html.twig' %}
+
+    <div class="dashboard-container">
+        <div class="left-column" style="width: 100%; justify-content:center;">
+            <!-- ArchitectProjects -->
+            <div class="projectssection">
+                <div class="sectionheading">
+                <h2>{{ customer.getcustomertype() }} Requirements</h2> 
+                </div>
+                <div class="Add-project-button">
+                    <a href="/account/Add-Requirements" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-plus" aria-hidden="true" style="font-size:15px;"></i> Add Requirements</a>
+                </div>
+                    <!-- ArchitectProjects -->
+                <div class="details">
+                    <div class="pro-projects">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Requirement Title</th>
+                                    <th>View</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ProRequirement in ProRequirements %}
+                                    {% if ProRequirement.Professional == ProProfile %}
+                                        <tr>
+                                            <td><input type="checkbox"></td>
+                                            <td>
+                                                <strong>{{ ProRequirement.getTitle() }}</strong>
+                                            </td>
+                                            <td><a href="/account/Requirements/view/{{ ProRequirement.getKey() }}">View</a></td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            
+            </div> 
+        </div>
+    
+    
+{% endblock %}

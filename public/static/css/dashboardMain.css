@@ -1,0 +1,396 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body {
+    height: 100%;
+    width: 100%;
+    font-family: "Poppins", sans-serif;
+    scroll-behavior: smooth;
+}
+p, h2, h3, h1, h4, a{
+    font-family: "Poppins", sans-serif;
+    color: #202224;
+    letter-spacing: 0.3px;
+    
+}
+.dashLogo img{
+    max-width: 166px;
+}
+
+a{
+    font-family: "Poppins", sans-serif;
+    color: #1BA89D;
+    text-decoration: none;
+}
+a:hover{
+    font-family: "Poppins", sans-serif;
+    color: #202224;
+}
+/* DesiDashboard Main */
+
+.dashboardMain{
+    display:flex;
+}
+.dashboardCol1{
+    flex: 0 0 16.5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 307px;
+    gap: 9px;
+    padding-right: 16px;
+}
+.dashboardCol1 > * {
+    width: 100%;
+}
+.dashLogo{
+    display: flex;
+    justify-content: center;
+    margin: 19px 0px;
+}
+
+/* DashboardLeftLCol */
+.dashboardbutton{
+    display: flex;
+    justify-content: left;
+    gap: 20px;
+    
+}
+.dashboardbutton a{
+    background-color: #1BA89D;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 100%;
+    min-height: 50px;
+    border-radius: 6px;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    position: relative;
+}
+.dashboardbuttonLink span {
+    position: absolute;
+    left: 18px;
+}
+.dashboardbuttonLink span img {
+    width: 18px;
+}
+.dashboardAwrapper{
+    display: flex;
+    justify-content: center;
+    flex: 0 0 86%;
+}
+.lefthighlighter{
+    width:5px;
+    min-height:100%;
+    background-color: #1BA89D;
+    background-color: #1BA89D;
+    border-radius: 0 41px 41px 0px;
+}
+.dashboardbuttonLink:hover{
+    cursor: pointer;
+}
+.dashboardbuttonLink img{
+    margin-right: 7px;
+    margin-top: 5px;
+}
+.ProfileType, .Creditbalance, .ProfileActivation{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 14px;
+    min-height: 41px;
+}
+
+.ProfileType p, .Creditbalance p, .ProfileActivation p{
+    font-size: 14px;
+}
+.ProfileType a {
+    font-size: 14px;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 13px;
+
+}
+.dashboard-profiledetails{
+    padding-left: 32px;
+    padding-bottom: 40px;
+    padding-top: 41px;
+    border-bottom: 1px solid #D8D8D8;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.ProfileActivation svg{
+    margin-top: 2px;
+}
+.userActivation{
+    text-align: center;
+    font-size: 17px;
+    color: #1BA89D;
+    font-weight: 500;
+    letter-spacing: 0.9px;
+}
+.UserProfileActivation{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    min-height: 23px;
+}
+.dashboardPages{
+    padding-left: 32px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #D8D8D8;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.dashboardPages h3{
+    line-height: 61px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+.dashboardPages .ProfileType a{
+    color: #202224;
+}
+.dashboardPages .ProfileType{
+    min-height: 50px;
+}
+
+
+/* Dashboard navigation */
+.dashboardCol2{
+    width: 100%;
+}
+.dashboard_navigation{
+    display: flex;
+    justify-content: space-evenly;
+}
+.dashboard_navigation img{
+    width:38px;
+    border-radius: 22px;
+}
+.dashboard_navigation > ul{
+    display: flex;
+    min-height: 68px;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+}
+.dashboard_navigation li{
+    list-style: none;
+}
+.dashboard_navigation a{
+    text-decoration: none;
+    font-size: 17px;
+    color: #000000;
+}
+.DashboardContentArea{
+    background-color: #F3FCFC;
+    min-height: 100%;
+    min-width: 100%;
+    padding: 30px 34px;
+    
+}
+.welcomeMessage p{
+    font-size: 31px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+}
+.welcomeMessage {
+    margin: 9px 8px;
+}
+
+/* Dashboard Contents Main */
+
+.QuickStatWrapper{
+    display:flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+.quickstatCol1{
+    display:flex;
+    flex-direction: column;
+    gap:26px;
+}
+.QuickStatIcon{
+    padding: 12px;
+    background-color: #e5e4fd;
+    border-radius: 22px;
+}
+.dashboardQuickStats{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 29px;
+    margin-top: 25px;
+    
+}
+
+.DashboardQuickStatContainer{
+    background-color: #fff;
+    padding: 24px 19px;
+    border-radius: 22px;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    flex: 0 0 23%;
+}
+.DashboardQuickStatContainer h2{
+    font-size: 28px;
+    letter-spacing: 1px;
+}
+.quickstatCol1 h3{
+    font-size: 16px;
+    color: #636466;
+}
+.DashboardQuickStatContainer p{
+    font-size: 15px;
+}
+/* Dashboard Projects Area */
+.dashboardProjectsAreaContainer, .dashboardRequirementsAreaContainer, .dashboardEnquiriesAreaContainer{
+    margin: 30px 0px;
+    padding: 24px 19px;
+    background-color: #fff;
+    border-radius: 22px;
+}
+.dashboardProjectsAreaContainer h3, .dashboardRequirementsAreaContainer h3, .dashboardEnquiriesAreaContainer h3{
+    margin-bottom: 28px;
+    font-size: 25px;
+    font-weight: 400;
+}
+.DashboardProjects img{
+    border-radius: 13px;
+}
+.DashboardRequirements > .requirements-table, .DashboardEnquiries > .Enquiries-table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    overflow: hidden; 
+    border-radius: 22px;
+}
+.DashboardRequirements > .requirements-table thead, .DashboardEnquiries > .Enquiries-table thead{
+    background-color: #f1f4f9;
+    overflow: hidden;
+    border-radius: 22px;
+}
+.DashboardRequirements > .requirements-table thead th, .DashboardEnquiries > .Enquiries-table thead th{
+    padding: 10px;
+}
+.DashboardRequirements > .requirements-table h3{
+    margin:0;
+    padding: 30px 0px;
+    font-size: 16px;
+    color: #000;
+}
+.DashboardRequirements table, .DashboardEnquiries table{
+    font-size: 14px;
+    letter-spacing: 0.3px;
+}
+.DashboardRequirements table h3, .DashboardEnquiries table h3{
+    font-size: 14px;
+    letter-spacing: 0.3px;
+}
+.DashboardEnquiries > .Enquiries-table td{
+    margin:0;
+    padding: 30px 0px;
+    color: #000;
+}
+.requirementTitle {
+    color: #000;
+}
+.details-button{
+    padding: 5px 10px;
+    color: #fff;
+    background-color: #00B69B;
+    border-radius: 18px;
+}
+.details-button:hover{
+    color: #fff;
+}
+tbody tr{
+    border-bottom: 1px solid #9797971c;
+}
+
+.DashboardProjects{
+    display: flex;
+    gap: 20px;
+}
+.addprojectbutton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.addprojectbutton a{
+    padding: 20px 23px;
+    border: 1px solid #000;
+    border-radius: 115px;
+}
+.EnquiryID{
+    max-width: 30px;
+}
+
+/* Dropdown CSS */
+.dropdown {
+    position: relative;
+    padding: 12px 0px;
+}
+
+.dropdown-content {
+    position: absolute;
+    background-color: #fff;
+    top: 100%;
+    right: 0;
+    display: none;
+}
+.dropdown-content li {
+    padding: 10px 26px;
+}
+
+/* Dropdown css end */
+
+/* Notification */
+.badge {
+    position: absolute;
+    right: -5px;
+    top: -11px;
+    padding: 2px 4px;
+    border-radius: 29px;
+    font-size: 13px;
+    background-color: #404040;
+    color: #fff;
+}
+.notifications {
+    display:none;
+    position: absolute;
+    top: 100%;
+    right: 0%;
+    width: 319px;
+    background: #fff;
+    padding: 20px 15px;
+}
+.NotificationTitle {
+    font-size: 16px;
+    letter-spacing: 0.3px;
+}
+.customnotification-box{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.notification-item {
+    padding: 20px 0px;
+    border-bottom: 1px solid #D8D8D8;
+}
+.Date p {
+    color: #767676;
+}
+.notificationBtnCont:hover {
+    cursor: pointer;
+}

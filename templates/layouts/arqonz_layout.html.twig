@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="{{ app.request.locale }}">
+    <head>
+    
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        {% apply spaceless %}
+            {# add global stylesheets and scripts outside of any blocsk to add them to the helpers before any others assets are added #}
+            {# we use the view helper to have cache buster functionality #}
+            {% do pimcore_head_link().appendStylesheet('https://fonts.googleapis.com/css?family=Hind+Guntur:300,400,500,600,700&display=swap') %}
+            {% do pimcore_head_link().appendStylesheet('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css',null,null,{integrity:"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T",crossorigin:"anonymous"}) %}
+            {# {% do pimcore_head_link().appendStylesheet('https://use.fontawesome.com/releases/v5.9.0/css/all.css') %} #}
+            {# {% do pimcore_head_link().appendStylesheet('https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css') %} #}
+            {% do pimcore_head_link().appendStylesheet(asset('static/lib/magnific/magnific.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('static/lib/autocompletejs/css/autoComplete.css'), 'screen') %}
+            {# {% do pimcore_head_link().appendStylesheet('https://use.fontawesome.com/releases/v5.7.0/css/all.css',null,null,{integrity:'sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ',crossorigin:'anonymous'}) %} #}
+            {% do pimcore_head_link().appendStylesheet(asset('static/css/arqonz_global.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('static/css/arqonz_custom.css'), 'screen') %}
+            {% if editmode %}
+                {% do pimcore_head_link().appendStylesheet(asset('/static/css/editmode.css')) %}
+            {% endif %}
+            {% do pimcore_head_script().appendFile('https://code.jquery.com/jquery-3.6.3.slim.min.js',null,null,{ integrity:"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo",crossorigin:"anonymous"}) %}
+            {% do pimcore_head_script().appendFile('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js',null,null,{ integrity:"sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1",crossorigin:"anonymous"}) %}
+            {% do pimcore_head_script().appendFile('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js',null,null,{ integrity:"sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM",crossorigin:"anonymous"}) %}
+            {% do pimcore_head_script().appendFile(asset('static/lib/magnific/magnific.js')) %}
+            {% do pimcore_head_script().appendFile(asset('static/lib/autocompletejs/js/autoComplete.min.js')) %}
+            {% do pimcore_head_script().appendFile(asset('static/js/search-autocomplete.js')) %}
+            {% do pimcore_head_script().appendFile(asset('static/js/main.js')) %}
+            {% if not editmode %}
+                    {% do pimcore_head_script().appendFile(asset('static/js/frontend.js')) %}
+            {% endif %}
+
+            {% if not document is defined or not document %}
+                {% set document = pimcore_document(1) %}
+            {% endif %}
+
+            {% if document is instanceof('\\Pimcore\\Model\\Document\\Link') %}
+                {# @var document \Pimcore\Model\Document\Link #}
+                {% set document = document.getElement() %}
+            {% endif %}
+
+            {% if document is instanceof('\\Pimcore\\Model\\Document\\Page') %}
+                {% if document.getTitle() is not empty %}
+                    {% do pimcore_head_title().set(document.getTitle()) %}
+                {% endif %}
+
+                {% if document.getDescription() is not empty %}
+                    {% do pimcore_head_meta().setDescription(document.getDescription()) %}
+                {% endif %}
+
+                {% do pimcore_head_title().append('Pimcore Demo') %}
+                {% do pimcore_head_title().setSeparator(' : ') %}
+            {% endif %}
+
+            {% set isPortal = ((isPortal is defined) and isPortal) %}
+        {% endapply %}
+           <link
+        rel="stylesheet"
+        href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css"
+        >
+
+        {# we're using the deferred extension here to make sure this block is rendered after all helper calls #}
+        {% block layout_head_meta deferred %}
+            {{ pimcore_head_title() }}
+            {{ pimcore_head_meta() }}
+
+            {% if pimcore_placeholder('canonical').count() %}
+                <link rel="canonical" href="{{ pimcore_placeholder('canonical') }}"/>
+            {% endif %}
+
+        {% endblock %}
+
+        {% block head_stylesheets deferred %}
+            {{ pimcore_head_link() }}
+        {% endblock %}
+
+    </head>
+    <body id="main">
+     
+        {# get root node if there is no document defined (for pages which are routed directly through static route) #}
+        {% if not document is defined or not document %}
+            {% set document = pimcore_document(1) %}
+        {% endif %}
+
+        <nav class="navbar navbar-expand-md navbar-dark sticky-top py-1 site-header {{ document.getProperty('header_color') }}">
+
+            {# get the document which should be used to start in navigation | default home #}
+            {% set navStartNode = document.getProperty('navigation_root') %}
+
+            {% if not navStartNode is instanceof('\\Pimcore\\Model\\Document') %}
+                {% set navStartNode = pimcore_document(1) %}
+            {% endif %}
+
+            {% set mainNavigation =  app_navigation_data_links(document, navStartNode) %}
+            <div class="container" id ="logobar">
+                {#Logo Image#}
+                <a class="py-2 mb-2" href="{{ navStartNode }}">
+                    <img id="logo" src="{{ asset('/static/images/Arqonz.png') }}" alt="Classic Cars - Pimcore Demo">
+                </a>
+                {#responsive burger menu icon#}
+                <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <label for="" class="menu-icon">
+                    <i class="fa-solid fa-bars" id="menu-icon"></i>
+                    <i class="fa-solid fa-xmark" id="close-icon"></i>
+                </label>
+                {#main header#}
+                <div class="arqonz-nav" id="arqonz-nav">
+                    {#header - generate pimcore navigation #}
+                    <ul>
+                        <li>
+                            <a class="nav-link" href="http://arqonz.in/">Home</a>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <a class="nav-link" href="javascript:void(0)">Professionals <i class="fa-solid fa-caret-down"></i></a>
+                            <ul>
+                                <li>
+                                    <a class="nav-link" href="/architects">Architects</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href="/contractors">Contractors</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href="/designers">Designers</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href="/engineers">Engineers</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <a class="nav-link" href="javascript:void(0)">Projects <i class="fa-solid fa-caret-down"></i></a>
+                            <ul>
+                                <li>
+                                    <a class="nav-link" href="/builders">Builders</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <a class="nav-link" href="javascript:void(0)">Products <i class="fa-solid fa-caret-down"></i></a>
+                            <ul>
+                                <li>
+                                    <a class="nav-link" href="/manufacturers">Manufacturers</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href="#">Dealers</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href="#">Distributors</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href="#">Retailers</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        {% set unreadCount = 0 %}
+                        {% for notification in app.user.Notifications %}
+                            {% if notification.ReadStatus == "unread" %}
+                                {% set unreadCount = unreadCount + 1 %}
+                            {% endif %}
+                        {% endfor %}
+    
+                        <ul id="Notificationscontainer">
+                            <li>
+                                <a class="nav-link" id="notificationcontainer" href="javascript:void(0);">
+                                    <span><i class="fa-solid fa-bell"></i></span>
+                                    {% if unreadCount > 0 %}
+                                        <span class="badge">{{ unreadCount }}</span>
+                                    {% endif %}
+                                </a>
+                                <div class="notifications">
+                                    {% for notification in app.user.Notifications|reverse %}
+                                        {% include '/Professional/Notifications_card.html.twig' with {'notification': notification, 'customertype': app.user.customertype} %}
+                                    {% endfor %}
+                                    <script>
+                                        // Add click event handler to notification links
+                                        document.querySelectorAll('.notification-link').forEach(function(link) {
+                                            link.addEventListener('click', function(event) {
+                                                event.preventDefault();
+                                                var notificationId = this.getAttribute('data-notification-id');
+                                                markNotificationAsRead(notificationId, this.href); // Pass the URL to navigate to
+                                            });
+                                        });
+
+                                        // Function to mark notification as read via AJAX
+                                        function markNotificationAsRead(notificationId, url) {
+                                            // Make an AJAX request to update the read status
+                                            var xhr = new XMLHttpRequest();
+                                            xhr.open('GET', '/mark-notification-as-read/' + notificationId);
+                                            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                                            xhr.onreadystatechange = function() {
+                                                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                                                    // After marking as read, navigate to the URL
+                                                    window.location.href = url;
+                                                }
+                                            };
+                                            xhr.send();
+                                        }
+                                    </script>
+
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            var notificationContainer = document.querySelector('.notifications');
+
+                                            // Hide the notifications container by default
+                                            notificationContainer.style.display = 'none';
+
+                                            // Add click event listener to the bell icon
+                                            document.getElementById('notificationcontainer').addEventListener('click', function() {
+                                                // Toggle the display property of the notifications container
+                                                if (notificationContainer.style.display === 'none') {
+                                                    notificationContainer.style.display = 'block';
+                                                } else {
+                                                    notificationContainer.style.display = 'none';
+                                                }
+                                            });
+                                            document.body.addEventListener('click', function(event) {
+                                                // Check if the click event occurred outside of the notification container
+                                                //if (!notificationContainer.contains(event.target)) {
+                                                    // Close the notifications container
+                                                    notificationContainer.style.display = 'none';
+                                                //}
+                                            });
+                                            document.body.addEventListener('click', function(event) {
+                                                // Check if the click event occurred outside of the notification container and the bell icon
+                                                if (!notificationContainer.contains(event.target) && event.target !== bellIcon) {
+                                                    // Close the notifications container
+                                                    notificationContainer.style.display = 'none';
+                                                }
+                                            });
+                                            document.querySelectorAll('a.nav-link').forEach(function(navLink) {
+                                                if (!navLink.closest('#Notificationscontainer')) {
+                                                    navLink.addEventListener('click', function() {
+                                                        notificationContainer.style.display = 'none';
+                                                    });
+                                                }
+                                            });
+
+                                        });
+                                    </script>
+                                </div>
+                            </li>
+                        </ul>
+                    {% endif %}
+        
+                    <ul>
+                        <li>
+                            <a class="nav-link" href="javascript:void(0)"><i class="fa-duotone fa-user"></i> <i class="fa-solid fa-caret-down"></i></a>
+                            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                <ul>
+                                    <li>
+                                        <a class="nav-link" href="{{ path('account-index') }}">Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link" href="/account/Profile">Profile</a>
+                                    </li>
+                                    {% if app.user.PortfolioActivate == 'true' %}
+                                        {# <li>
+                                            <a class="nav-link" href="/account/Portfolio">Portfolio</a>
+                                        </li> #}
+                                        {% if app.user.PortfolioActivate == 'true' %}
+                                            {% if app.user.customertype == 'Manufacturer' %}
+                                                <li>
+                                                    <a class="nav-link" href="/manufacturer/add-product">Products</a>
+                                                </li>
+                                            {% else %}
+                                                <li>
+                                                    <a class="nav-link" href="/account/Projects">Projects</a>
+                                                </li>
+                                                <li>
+                                                    <a class="nav-link" href="/account/Requirements">Requirements</a>
+                                                </li>
+                                                {% if app.user.customertype == 'Builder' %}
+                                                    <li>
+                                                    <a class="nav-link" href="/account/Proposals">Proposals</a>
+                                                    </li>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endif %}
+                                        
+                                        <li>
+                                            <a class="nav-link" href="/account/Enquiries">Enquiries</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if app.user.PortfolioActivate == 'false' %}
+                                        {% set portfoliolink = (app.user.customertype ~ 's') | lower %}
+                                        {# <li>
+                                            <a class="nav-link" href="/{{ portfoliolink }}/signup">Portfolio</a>
+                                        </li> #}
+                                    {% endif %}
+                                    <li>
+                                        <a class="nav-link" href="/account/Endorsements">Endorsements</a>
+                                    </li>
+
+                                    <li>
+                                        <a class="nav-link" href="{{ path('account-logout') }}">Logout <i class="fa-solid fa-right-from-bracket"></i></a>
+                                    </li>
+                                </ul>
+                            {%  else %}
+                                <ul>
+                                    <li>
+                                        <a class="nav-link" href="/account/login">Login</a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link" href="/account/register">Register</a>
+                                    </li>
+                                </ul>
+                            {% endif %}
+                        </li>
+                    </ul>
+                    
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            var menuItems = document.querySelectorAll('.arqonz-nav ul li');
+
+                            menuItems.forEach(function (menuItem) {
+                                menuItem.addEventListener('click', function (e) {
+                                    e.stopPropagation();
+                                    var subMenu = this.querySelector('ul');
+
+                                    // Close all other open dropdowns
+                                    menuItems.forEach(function (otherMenuItem) {
+                                        if (otherMenuItem !== menuItem) {
+                                            var otherSubMenu = otherMenuItem.querySelector('ul');
+                                            if (otherSubMenu) {
+                                                otherSubMenu.style.display = 'none';
+                                            }
+                                        }
+                                    });
+
+                                    if (subMenu) {
+                                        subMenu.style.display = (subMenu.style.display === 'block') ? 'none' : 'block';
+                                    }
+                                });
+                            });
+
+                            // Hide dropdowns when clicking outside
+                            document.addEventListener('click', function () {
+                                menuItems.forEach(function (menuItem) {
+                                    var subMenu = menuItem.querySelector('ul');
+                                    if (subMenu) {
+                                        subMenu.style.display = 'none';
+                                    }
+                                });
+                            });
+                        });
+                    </script>
+                    
+
+
+                    {# {{
+                        pimcore_render_nav(mainNavigation, 'menu', 'renderMenu', {
+                            maxDepth: 2,
+                            ulClass: {
+                                0: 'navbar-nav menu-links ml-4 m-auto',
+                                1: 'dropdown dropdown-menu',
+                                'default': 'dropdown-menu dropdown-submenu'
+                            }
+                        })
+                    }} #}
+
+
+                    {#header - navigation icons#}
+                    {# {{ include('includes/navigation-icons.html.twig') }} #}
+                </div>
+            </div>
+        </nav>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var menuIcon = document.getElementById("menu-icon");
+                var closeIcon = document.getElementById("close-icon");
+                var navMenu = document.getElementById("arqonz-nav");
+
+                menuIcon.addEventListener("click", function () {
+                    navMenu.classList.add("show-menu");
+                    menuIcon.style.display = "none";
+                    closeIcon.style.display = "inline-flex";
+                    navMenu.style.display = "block";
+                });
+
+                closeIcon.addEventListener("click", function () {
+                    navMenu.classList.remove("show-menu");
+                    menuIcon.style.display = "inline-flex";
+                    closeIcon.style.display = "none";
+                    navMenu.style.display = "none";
+                });
+            });
+        </script>
+        <header></header>
+
+        <main role="main">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+
+            {% if isPortal %}
+                {{ block('content') }}
+            {% else %}
+                <div id="content" class="container">
+                    <div class="row">
+                        {% set leftNavShow = document.getProperty('left_nav_show') %}
+                        {% set showBreadcrumbs = (hideBreadcrumbs is defined) ? not hideBreadcrumbs : false %}
+                        {% set mainColClass = leftNavShow ? 'col-md-9 pt-3 pt-md-5 order-last' : 'col-md-12' %}
+
+                        <div class="{{ mainColClass }}">
+                            {% if showBreadcrumbs %}
+                                {% set mainNavStartNode = document.getProperty('navigation_root') %}
+                                {% if mainNavStartNode is empty %}
+                                    {% set mainNavStartNode = pimcore_document(1) %}
+                                {% endif %}
+
+                                {% set breadbrumbs = pimcore_build_nav({
+                                    active: document,
+                                    root: mainNavStartNode
+                                }) %}
+                                {% do app_navigation_enrich_breadcrumbs(breadbrumbs) %}
+                                {% do pimcore_nav_renderer('breadcrumbs').setMinDepth(null) %}
+
+                                <div class="breadcrumb-header">
+                                    <a href="/">{{ "Home"|trans }}</a> &gt;
+                                    {{ pimcore_render_nav(breadbrumbs, 'breadcrumbs') }}
+                                </div>
+                            {% endif %}
+                            {{ block('content') }}
+                        </div>
+
+                        {% if leftNavShow %}
+                            <div class="col-md-3 pt-3 pt-md-5 order-first sidebar">
+                                <div class="sticky">
+                                    <div class="bs-sidebar hidden-print affix-top" role="complementary">
+                                        {% set leftStartNode = document.getProperty('left_nav_start_node') %}
+                                        {% if leftStartNode is empty %}
+                                            {% set leftStartNode = mainNavStartNode %}
+                                        {% endif %}
+
+                                        {% set leftNav = pimcore_build_nav({
+                                            active: document,
+                                            root: leftStartNode
+                                        }) %}
+
+                                        <h5>{{ leftStartNode.getProperty('navigation_name') }}</h5>
+
+                                        {{ pimcore_render_nav(leftNav, 'menu', 'renderMenu', {
+                                            ulClass: 'nav bs-sidenav',
+                                            expandSiblingNodesOfActiveBranch: true,
+                                        }) }}
+                                    </div>
+                                    {{ pimcore_inc(document.getProperty('sidebar')) }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+            <a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top" role="button" title="Click to return on the top" data-toggle="tooltip" data-placement="left">
+                <span class="fa fa-arrow-up"></span>
+            </a>
+        
+        </main>
+
+        {# include a document-snippet - in this case the footer document #}
+        {# {{ pimcore_inc(document.getProperty('footer')) }} #}
+
+        {# FOOTER CODE BELOW #}
+        {% if editmode %}
+            {% do pimcore_head_link().appendStylesheet(asset('static/css/editmode.css')) %}
+            {{ pimcore_head_link() }}
+        {% endif %}
+        {#footer#}
+        <footer class="">
+        <section id="footer">
+            <div id="footersections">
+                <div class="col1">
+                    <div id="footer-logo">
+                        <img id="" src="{{ asset('/static/images/logo-footer.png') }}" alt="Find Professionals for Construction">
+                    </div>
+                    <div id="footercontact">
+                        <p>Mumbai, India</p>
+                        <p>Call us: 0984453895</p>
+                    </div>
+                </div>
+                <div class="col1">
+                    <h3>Explore</h3>
+                    <li><a href="/architects">Architects</a></li>
+                    
+                    <li><a href="/builders">Builders</a></li>
+                    
+                    <li><a href="/contractors">Contractors</a></li>
+                    
+                    <li><a href="/designers">Designers</a></li>
+                    
+                    <li><a href="#">Engineers</a></li>
+                    
+                    <li><a href="/manufacturers">Manufacturers</a></li>
+                
+                </div>
+                <div class="col1">
+                    <h3>About</h3>
+                    <li><a href="#">Careers</a></li>
+                    
+                    <li><a href="#">Press</a></li>
+                    
+                    <li><a href="#">Contact Us</a></li>
+                    
+                    <li><a href="#">Terms of Use</a></li>
+                    
+                    <li><a href="#">Privacy policy</a></li>
+                </div>
+                <div class="col1">
+                    <h3>Download Our App</h3>
+                    <div id="downloadapple">
+                        <img id="" src="{{ asset('/static/images/download-apple.png') }}" style="max-width:70%;" alt="Download Arqonz for Apple">
+                    </div>
+                    <div id="downlodandroid">
+                        <img id="" src="{{ asset('/static/images/Download-android.png') }}" style="max-width:70%;"  alt="Download Arqonz for Android">
+                    </div>
+                </div>
+            </div>
+            <p class="copyrighttext">© 2024 Arqonz. Crafted with love.</p>
+        </section>
+            
+        </footer>
+
+
+        {# FOOTER CODE ENDS HERE #}
+
+        {# output scripts added before #}
+        {% block headscripts deferred %}
+            {{ pimcore_head_script() }}
+        {% endblock %}
+
+
+        {% block inlinescripts deferred %}
+            {{ pimcore_inline_script() }}
+        {% endblock %}
+    </body>
+</html>

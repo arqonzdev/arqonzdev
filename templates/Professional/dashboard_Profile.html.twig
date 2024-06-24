@@ -1,0 +1,224 @@
+{% extends 'layouts/arqonz_layout.html.twig' %}
+{% do pimcore_head_link().appendStylesheet('/static/css/arqonz_Prodashboard.css') %}
+{# {% form_theme form 'bootstrap_3_layout.html.twig' %} #}
+{% form_theme editForm 'bootstrap_5_layout.html.twig' %}
+{% if customer.getcustomertype() != 'Customer' %}
+    {% form_theme companyform 'bootstrap_5_layout.html.twig' %}
+{% endif %}
+
+{% block content %}
+    <!-- Add this in the head section of your HTML -->
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    {% include 'Professional/dashboard_navigation.html.twig' %}
+
+    <div class="dashboard-container">
+        <div class="left-column">
+            <!-- Profile Details -->
+            <div class="profile-details">
+                <div class="sectionheading">
+                    <h2>Profile Details</h2>
+                </div>
+                <div class="details">
+                    <div id="ProfileCompletionMeter">
+                        <b>Profile Completed -  {{ customer.getProfileCompletion() }}%</b>
+                        <div id="meterouter">
+                            <div id="completion" style="width:{{ customer.getProfileCompletion() }}%;">
+
+                            </div>
+                        </div>
+                    </div>
+                    <p class="userDetails"><strong>Role:</strong> {{ customer.getcustomertype() }}</p>
+                    <p class="userDetails"><b>Credit Balance:</b> {{ customer.getCreditPoints() }} ₹</p>
+                    <form method="post" action="/account/Profile">
+                        {{ form_start(editForm) }}
+                        
+                        {{ form_row(editForm.firstname) }}
+                        {{ form_row(editForm.lastname) }}
+                        
+                        {{ form_end(editForm) }}
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Profile Form -->
+        <div class="edit-profile-form">
+            
+        </div>
+        {% if customer.getcustomertype() != 'Customer' %}
+            <div class="right-column profile-details">
+                    <div class="sectionheading">
+                        <h2>Company Details</h2>
+                    </div>
+                {% if customer.PortfolioActivate() != 'true' %}
+                    <div class="details">
+                        <p>Complete filling your company details to Activate Portfolio.</p>
+                        {# <form method="post" action="/account/Portfolio"> #}
+                            {{ form_start(companyform) }}
+                        <div>
+                            {{ form_row(companyform.CompanyName) }}
+                        </div>
+                        <div>
+                            {{ form_row(companyform.Description) }}
+                        </div>
+                        {% if customer.getcustomertype() == 'Distributor' %}
+                            <div>
+                                {{ form_row(companyform.Brands) }}
+                            </div>
+                        {% endif %}
+
+                        {# <div class="specialization">
+                                {{ form_row(companyform.specialization) }}
+                            </div> #}
+                        <div class="gstnumber">
+                            {{ form_row(companyform.gstnumber) }}
+                        </div>
+                        <div class="cities-served">
+                            {{ form_row(companyform.CitiesServed, {'attr': {'class': 'js-select-cities', 'value': 'CitiesServed', 'id': 'cities-select'}}) }}
+                        </div>             
+                        <div class="imageupload">
+                            {{ form_row(companyform.ProfileImage) }}
+                            {% if customer.getPortfolio() is not null and customer.getPortfolio()|length > 0 and customer.getPortfolio()[0].getProfileImage() is not null %}
+                                <img src="{{ customer.getPortfolio()[0].getProfileImage().getThumbnail("Thumbnail") }}" alt="Profile Image" class="profile-image">
+                                <button class="btn btn-danger" id="removeImageBtn" data-asset-id="{{ customer.getPortfolio()[0].getProfileImage().getId() }}">Remove Image</button>
+                            {% endif %}
+                        </div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                var removeImageBtn = document.getElementById('removeImageBtn');
+
+                                if (removeImageBtn) {
+                                    removeImageBtn.addEventListener('click', function(e) {
+                                        e.preventDefault();
+                                        var assetId = this.getAttribute('data-asset-id');
+                                        var xhr = new XMLHttpRequest();
+                                        xhr.open('POST', '/delete-asset');
+                                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                                        xhr.onload = function() {
+                                            if (xhr.status === 200) {
+                                                console.log(xhr.responseText);
+                                                // Remove the image preview from the DOM
+                                                var profileImage = document.querySelector('.profile-image');
+                                                if (profileImage) {
+                                                    profileImage.parentNode.removeChild(profileImage);
+                                                }
+                                                // Optionally, you can update the UI to indicate the image has been removed
+                                            } 
+                                             {
+                                                console.error('Error:', xhr.statusText);
+                                            }
+                                        };
+                                        xhr.onerror = function() {
+                                            console.error('Request failed');
+                                        };
+                                        xhr.send('assetId=' + encodeURIComponent(assetId));
+                                    });
+                                }
+                            });
+                        </script>
+
+                        <div class="row">
+                                <div class="col-md-2">
+                                    {{ form_row(companyform.CountryCode) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(companyform.PhoneNumber) }}
+                                </div>
+                        </div>
+                        <div>
+                            {{ form_row(companyform.StreetAddress) }}
+                        </div>
+                        <div class="row" id="CityCountry">
+                            <div class="col-md-6">
+                                {{ form_row(companyform.City, {'attr': {'class': 'js-select-city', 'id': 'city-select'}}) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(companyform.State, {'attr': {'class': 'js-select-state', 'id': 'state-select'}}) }}
+                            </div>
+                        </div>
+                        <div class="row" id="CountryPincode">
+                            <div class="col-md-6">
+                                {{ form_row(companyform.Country, {'attr': {'class': 'js-select-country'}}) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(companyform.PinCode) }}
+                            </div>
+                        </div>
+
+
+                        {{ form_end(companyform) }}
+                        {# </form> #}
+                    </div>
+
+                {% elseif customer.PortfolioActivate() == 'true' %}
+                    <div class="profile-image">
+                        {% if ProProfile.getProfileImage() %}
+                            <img src="{{ ProProfile.getProfileImage().getThumbnail("galleryCarousel") }}" alt="Profile Image" class="dashbord-profile-image">
+                        {% else %}
+                            <img src="{{ pimcore_asset_by_path('/Static/DefaultImage.jpeg').getThumbnail("galleryCarousel") }}" alt="Profile Image" class="profile-image">
+                        {% endif %}
+                    </div>
+                    <div class="companydetailsdash">
+                        <div class="dash-company-name">
+                            <h2>{{ ProProfile.getCompanyName() }}</h1>
+                            <div class="dash-city">
+                                <p><b>City: </b>{{ ProProfile.getCity() }}</p>
+                            </div>
+                            <p><b>Cities Served:</b></p>
+                            <div class="citylist">
+                                {% set cities = ProProfile.CitiesServed() | split(',') %}
+                                {% for city in cities %}
+                                    <div class="citytagbox">
+                                        <p>{{ city|trim }}</p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="view-button">
+                                <a href="/{{ customer.getcustomertype()|lower }}/portfolio/{{ ProProfile.getKey() }}" target="_blank">View Portfolio</a>
+                                <a href="/account/Portfolio" target="_blank">Edit Portfolio</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+        {% endif %}
+    </div>
+    
+    
+    
+    
+
+
+
+    <script>
+    //ADD required Field
+    document.addEventListener('DOMContentLoaded', function () {
+        var form = document.querySelector('form[name]');
+        var requiredFields = form.querySelectorAll('[required]');
+
+        for (var i = 0; i < requiredFields.length; i++) {
+        var field = requiredFields[i];
+        var label = form.querySelector('label[for="' + field.id + '"]');
+
+        if (label) {
+            label.innerHTML += ' <span class="required" style="color:red;">*</span>';
+        }
+        }
+    });
+    </script>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+    $(".js-select-cities").select2();
+    $(".js-select-skills").select2();
+    });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'layouts/arqonz_layout.html.twig' %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+
+{% block content %}
+
+    <div class="container">
+
+
+        <div class="mb-5 d-flex justify-content-center">
+
+            <div class="col-12 col-md-6">
+
+            {% if errors %}
+                {% for error in errors %}
+                    <div class="alert alert-danger">
+                        {{ error | raw }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <h1 class="display-3 mb-3 font-weight-normal">{{ 'general.register' | trans }}</h1>
+
+            {{ form(form) }}
+
+
+            </div>
+        </div>
+    </div>
+
+<script>
+//ADD required Field
+document.addEventListener('DOMContentLoaded', function () {
+    var form = document.querySelector('form[name]');
+    var allRequiredFields = form.querySelectorAll('[required]');
+
+    for (var i = 0; i < allRequiredFields.length; i++) {
+        var field = allRequiredFields[i];
+        var label = form.querySelector('label[for="' + field.id + '"]');
+
+        if (label) {
+            label.innerHTML += ' <span class="required" style="color:red;">*</span>';
+        }
+    }
+
+    // Remove the required mark from labels associated with radio button options
+    var radioOptions = form.querySelectorAll('input[type="radio"]');
+    
+    for (var j = 0; j < radioOptions.length; j++) {
+        var radioOption = radioOptions[j];
+        var optionLabel = form.querySelector('label[for="' + radioOption.id + '"]');
+        
+        if (optionLabel) {
+            optionLabel.innerHTML = optionLabel.innerHTML.replace('<span class="required" style="color:red;">*</span>', '');
+        }
+    }
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var form = document.querySelector('form[name]');
+    var allLabels = form.querySelectorAll('.col-form-label');
+
+    for (var i = 0; i < allLabels.length; i++) {
+        var label = allLabels[i];
+        label.innerHTML += ' <span class="required" style="color:red;">*</span>';
+    }
+
+    // Remove the required mark from labels associated with radio button options
+    var radioOptions = form.querySelectorAll('input[type="radio"]');
+    
+    for (var j = 0; j < radioOptions.length; j++) {
+        var radioOption = radioOptions[j];
+        var optionLabel = form.querySelector('label[for="' + radioOption.id + '"]');
+        
+        if (optionLabel) {
+            optionLabel.innerHTML = optionLabel.innerHTML.replace('<span class="required" style="color:red;">*</span>', '');
+        }
+    }
+});
+</script>
+
+{% endblock %}
+

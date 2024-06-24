@@ -1,0 +1,210 @@
+{% extends 'layouts/arqonz_layout.html.twig' %}
+{% do pimcore_head_link().appendStylesheet('/static/css/arqonz_architectprofile.css') %}
+{% do pimcore_head_link().appendStylesheet('https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css') %}
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+{% block content %}
+
+    <div id="main-content" class="main-content mb-5">
+    
+        {# <div class="page-header">
+            <h1>{{ architectProfile.getCompanyName() }}</h1>
+        </div> #}
+
+        <div class="architect-profile">
+
+            <div class="profile-image">
+                {% if architectProfile.getProfileImage() %}
+                    <img src="{{ architectProfile.getProfileImage().getThumbnail("galleryCarousel") }}" alt="Profile Image" class="profile-image">
+                {% else %}
+                   <img src="{{ pimcore_asset_by_path('/Static/DefaultImage.jpeg').getThumbnail("galleryCarousel") }}" alt="Profile Image" class="profile-image">
+                {% endif %}
+            </div>
+
+            <div class="profile-details">
+                <div class="over-image">
+                    <div class="left-row">
+                        <div class="company-name">
+                            <h1>{{ architectProfile.getCompanyName() }}</h1>
+                            <div class="architectcity">
+                            <p>{{ architectProfile.getCity() }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right-row">
+                        <div class="Stars">
+                            {% set rating = architectProfile.getProRating() %}
+                            {% set fullStars = rating | round(0, 'floor') %}
+                            {% set hasHalfStar = (rating - fullStars) >= 0.5 %}
+                            <p>
+                            {% for i in range(1, 5) %}
+                                {% if i <= fullStars %}
+                                    <span class="fa fa fa-star checked" style="color: orange;"></span>
+                                {% elseif hasHalfStar %}
+                                    {% set hasHalfStar = false %}
+                                    <span class="fa-solid fa-star-half-stroke" style="color: orange;"></span>
+                                {% else %}
+                                    <span class="fa fa-regular fa-star"></span>
+                                {% endif %}
+                            {% endfor %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portfolio-content">
+                <div class="p-left-row">
+                    <div class="portfolio-attributes">
+                        {% if architectProfile.getPortfolioType() != 'Manufacturer' and architectProfile.getPortfolioType() != 'Distributor' %}
+                            <div class="attributebox">
+                                <p><i class="fas fa-money-check" aria-hidden="true" style="font-size:17px;"></i> Service Price</p>
+                                <b>₹ {{ architectProfile.PriceForHour() }}/Hr</b>
+                            </div>
+                        {% endif %}
+                        
+                        {% if architectProfile.getPortfolioType() != 'Manufacturer' and architectProfile.getPortfolioType() != 'Distributor' %}
+                            <div class="attributebox">
+                            <p><i class="fas fa-briefcase" aria-hidden="true" style="font-size:17px;"></i> Projects Completed</p>
+                            <b>{{ numberOfProjects }}</b>
+                            </div>
+                        {% endif %}
+                        {% if architectProfile.getPortfolioType() == 'Manufacturer' and architectProfile.getPortfolioType() != 'Distributor' %}
+                            <div class="attributebox">
+                            <p><i class="fas fa-briefcase" aria-hidden="true" style="font-size:17px;"></i> Products</p>
+                            <b>{{ numberOfProducts }}</b>
+                            </div>
+                        {% endif %}
+                        <div class="attributebox">
+                            <p><i class="fas fa-user-tie" aria-hidden="true" style="font-size:17px;"></i> Work Experience</p>
+                            <b>{{ architectProfile.Experience() }} Years</b>
+                        </div>
+                    </div>
+                    <div class="profile-details">
+                        <h2>Get to Know {{ architectProfile.getCompanyName() }}</h2>
+                        <p>Joined in {{creationdate}}</p>
+                    </div>
+                    <div class="secondary-attributes">
+                        <div class="Lrow">
+                            <p><i class="fa-solid fa-badge-check" style="font-size:19px;color:#4ba75a;"></i> Verified By Arqonz</p>
+                            <p><i class="fas fa-star" style="font-size:19px;color:#f8c246"></i> {{rating}} (5 Reviews)</p>
+                        </div>
+                        <div class="Rrow">
+                            <p><i class="fad fa-city" style="font-size:19px;color:#9d9d9d"></i> Cities Served</p>
+                            <div class="citylist">
+                                {% set cities = architectProfile.CitiesServed() | split(',') %}
+                                {% for city in cities %}
+                                    <div class="citytagbox">
+                                        <p>{{ city|trim }}</p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if architectProfile.getPortfolioType() != 'Manufacturer' and architectProfile.getPortfolioType() != 'Distributor'%}
+                        <div class="skills">
+                        <h2>Skills</h2>
+                        <div class="citylist">
+                            {% set skills = architectProfile.Skills() | split(',') %}
+                            {% for skill in skills %}
+                                    <div class="skilltagbox">
+                                        <p>{{ skill|trim }}</p>
+                                    </div>
+                                {% endfor %}
+                            
+                        </div>
+                    </div>
+                    {% endif %}
+                        
+                    <div class="Architect-description">
+                        <h2>Description</h2>
+                        {# {% set bio = architectProfile.getBio() %}
+                        {% if bio|length > 150 %}
+                            <p>{{ bio|slice(0, 150) ~ ' (...)' }}</p>
+                        {% else %}
+                            <p>{{ bio }}</p>
+                        {% endif %} #}
+                        <p>{{ architectProfile.getDescription() }}</p>
+                    </div>
+
+                    {% if architectProfile.getPortfolioType() != 'Manufacturer' and architectProfile.getPortfolioType() != 'Distributor'%}
+                        <div class="portfolio-projects">
+                            <h2>Portfolio Projects</h2>
+                            <div class="project-list">
+                                {% for project in pagination %}
+                                    {% include '/Professional/project_listing_card.html.twig' with {'project': project, 'portfolioType': architectProfile.getPortfolioType(),} %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="pagination">
+                            {% include 'includes/projectpagination.html.twig' with {'paginationVariables': paginationVariables} %}
+                        </div>
+                    {% endif %}
+                    {% if architectProfile.getPortfolioType() == 'Manufacturer' %}
+                        <div class="portfolio-projects">
+                            <h2>Products List</h2>
+                            <div class="project-list">
+                                {% for product in pagination %}
+                                    {% include '/Professional/project_listing_card.html.twig' with {'project': product, 'portfolioType': architectProfile.getPortfolioType(), 'listingtype':'Manufacturer'} %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="pagination">
+                            {% include 'includes/projectpagination.html.twig' with {'paginationVariables': paginationVariables} %}
+                        </div>
+                    {% endif %}
+                    
+
+                </div>
+                
+                <div class="p-right-row">
+                    <div class="enquiry-form">
+                        <div class="enquiry-title">
+                        <h2>Enquire with {{ architectProfile.getCompanyName() }}</h2>
+                        </div>
+                        {{ form(form) }}
+                    </div>
+                </div>
+            </div>
+
+            
+
+            {# <div class="otherdetails">
+                <div class="established-year">
+                    <p><i class="fa-solid fa-badge-check"></i> Year Established: {{ architectProfile.getYearEstablished() }}</p>
+                </div>
+                <div class="skills">
+                    <p>Skills: {{ architectProfile.getSkills() }}</p>
+                </div>
+                <div class="specialization">
+                {% if architectProfile.getspecialization() %}
+                    <p>Specialization: {{ architectProfile.getspecialization() }}</p>
+                {% endif %}
+                </div>
+                <div class="gstnumber">
+                {% if architectProfile.gstnumber() %}
+                    <p>GST Number: {{ architectProfile.getgstnumber() }}</p>
+                {% endif %}
+                </div>
+            </div> #}
+
+        </div>
+
+        
+        {# <div class="contact-details">
+            <h2>Contact Information</h2>
+            <div class="phone">
+                <p>Phone: {{ architectProfile.getCountryCode() }} {{ architectProfile.getPhoneNumber() }}</p>
+            </div>
+            <div class="email">
+                <p>Email: {{ architectProfile.getCustomer().getEmail() }}</p>
+            </div>
+            <div class="address">
+                <p>Address: {{ architectProfile.getStreetAddress() }}, {{ architectProfile.getCity() }}, {{ architectProfile.getState() }}, {{ architectProfile.getCountry() }} {{ architectProfile.getPinCode() }}</p>
+            </div>
+        </div> #}
+
+        
+    </div>
+{% endblock %}

@@ -1,0 +1,210 @@
+{% extends 'layouts/arqonz_layout.html.twig' %}
+
+{% do pimcore_head_link().appendStylesheet('/static/css/arqonz_Prodashboard.css') %}
+
+{% if app.user.PortfolioActivate == 'true' %}
+    {% if form is defined %}
+        {% form_theme form 'bootstrap_3_layout.html.twig' %}
+    {# {% else %} #}
+    {% endif %}
+{% endif %}
+
+{% block content %}
+    {% if form is defined and app.user.PortfolioActivate == 'true' %}
+        {% include 'Professional/dashboard_navigation.html.twig' %}
+    {% endif %}
+
+    <div class="dashboardparent">
+        <div class="welcomeMessage">
+            <p>Welcome, {{ customer.getFirstname() }}</p>
+        </div>
+        <div class="dashboard-container">
+            <div class="left-column">
+                
+                <!-- Profile Details -->
+                <div class="profile-details">
+                    
+                    <div class="sectionheading">
+                        <h2>User Details</h2>
+                    </div>
+                    <div class="details">
+                        <div id="ProfileCompletionMeter">
+                            <b>Profile Completed -  {{ customer.getProfileCompletion() }}%</b>
+                            <div id="meterouter">
+                                <div id="completion" style="width:{{ customer.getProfileCompletion() }}%;">
+
+                                </div>
+                            </div>
+                        </div>
+                        {# <p><strong>Name:</strong> {{ customer.getFirstname() }}</p> #}
+                        <p class="userDetails"><strong>Role:</strong> {{ customer.getcustomertype() }}</p>
+                        <p class="userDetails"><b>Credit Balance:</b> {{ customer.getCreditPoints() }} ₹</p>
+                        {% if form is defined and app.user.PortfolioActivate == 'true' %}
+                            <p class="userDetails"><strong>PortFolio Activation:</strong> Activated</p>
+                        {% else %}
+                            <p class="userDetails"><b>PortFolio Activation:</b> Pending Approval</p>
+                        {% endif %}
+                        {% if app.user.PortfolioActivate != 'true' %}
+                            <div class="Probelowtitle">
+                                <p style="color:red;">!Activate your Professional Portfolio</p>
+                                {% if app.user.customertype == 'Contractor' %}
+                                    <a href="/contractors/signup" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-eye" aria-hidden="true" style="font-size:15px;"></i>Sign Up</a>
+                                {% endif %}
+                                {% if app.user.customertype == 'Designer' %}
+                                    <a href="/designers/signup" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-eye" aria-hidden="true" style="font-size:15px;"></i>Sign Up</a>
+                                {% endif %}
+                                {% if app.user.customertype == 'Architect' %}
+                                    <a href="/architects/signup" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-eye" aria-hidden="true" style="font-size:15px;"></i>Sign Up</a>
+                                {% endif %}
+                                {% if app.user.customertype == 'Builder' %}
+                                    <a href="/builders/signup" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-eye" aria-hidden="true" style="font-size:15px;"></i>Sign Up</a>
+                                {% endif %}
+                                {% if app.user.customertype == 'Manufacturer' %}
+                                    <a href="/manufacturers/signup" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-eye" aria-hidden="true" style="font-size:15px;"></i>Sign Up</a>
+                                {% endif %}
+                                {% if app.user.customertype == 'Engineer' %}
+                                    <a href="/engineers/signup" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-eye" aria-hidden="true" style="font-size:15px;"></i>Sign Up</a>
+                                {% endif %}
+                                {% if app.user.customertype == 'Distributor' %}
+                                    <a href="/distributors/signup" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-eye" aria-hidden="true" style="font-size:15px;"></i>Sign Up</a>
+                                {% endif %}
+                                {% if app.user.customertype == 'Retailer' %}
+                                    <a href="/retailers/signup" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-eye" aria-hidden="true" style="font-size:15px;"></i>Sign Up</a>
+                                {% endif %}
+                                
+                            </div>
+                        {% endif %}
+                        <!-- Add other customer profile details as needed -->
+                    </div>
+                </div>
+                {% if form is defined and app.user.PortfolioActivate == 'true' and app.user.customertype != 'Manufacturer' %}
+                    <!-- ArchitectProfile Details -->
+                    <div class="pro-profile-details">
+                        <div class="sectionheading">
+                            <h2>{{ customer.getcustomertype() }} Profile</h2>
+                        </div>
+                        <div class="details">
+                            <p><strong>Company Name:</strong> {{ ProProfile.getCompanyName() }}</p>
+                            <p><strong>Year Established:</strong> {{ ProProfile.getYearEstablished() }}</p>
+                            <p><strong>Description:</strong> {{ ProProfile.getDescription()|slice(0, 400) }}..</p>
+                            <p><strong>Price for Hour:</strong> {{ ProProfile.getPriceForHour() }}</p>
+                            <p><strong>Skills:</strong> {{ ProProfile.getSkills() }}</p>
+                            <p><strong>Contact:</strong> {{ ProProfile.getPhoneNumber() }}, {{ ProProfile.getStreetAddress() }}, {{ ProProfile.getCity() }}, {{ ProProfile.getState() }}, {{ ProProfile.getCountry() }}, {{ ProProfile.getPinCode() }}</p>
+                            <!-- Add other ArchitectProfile details as needed -->
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            {% if form is defined and app.user.PortfolioActivate == 'true' %}
+                {% form_theme form 'bootstrap_5_layout_custom.html.twig' %}
+                <div class="right-column">
+                    
+                    <!-- ArchitectProjects -->
+                    {% if app.user.customertype != 'Manufacturer' %}
+                        <div class="projectssection">
+                            <div class="sectionheading">
+                                <h2>{{ customer.getcustomertype() }} Projects</h2> 
+                            </div>
+                            <div class="Add-project-button">
+                                {% if app.user.customertype == 'Contractor' %}
+                                    <a href="/contractor/portfolio/add-project" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-plus" aria-hidden="true" style="font-size:15px;"></i> Add Project</a>
+                                {% endif %}
+                                {% if app.user.customertype == 'Designer' %}
+                                    <a href="/designer/portfolio/add-project" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-plus" aria-hidden="true" style="font-size:15px;"></i> Add Project</a>
+                                {% endif %}
+                                {% if app.user.customertype == 'Architect' %}
+                                    <a href="/architect/portfolio/add-project" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-plus" aria-hidden="true" style="font-size:15px;"></i> Add Project</a>
+                                {% endif %}
+                                {% if app.user.customertype == 'Builder' %}
+                                    <a href="/builder/portfolio/add-project" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-plus" aria-hidden="true" style="font-size:15px;"></i> Add Project</a>
+                                {% endif %}
+                            </div>
+                            <!-- ArchitectProjects -->
+                            <div class="details">
+                                <div class="pro-projects">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Project Title</th>
+                                                <th>Edit</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for ProProject in ProProjects %}
+                                                {% if ProProject.Professional == ProProfile %}
+                                                    <tr>
+                                                        <td><input type="checkbox"></td>
+                                                        <td>
+                                                            <strong>{{ ProProject.getProjectName() }}</strong>
+                                                        </td>
+                                                        <td><a href="/account/Project/edit/{{ ProProject.getkey() }}">EDIT</a></td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div> 
+                    {% endif %}
+
+                    {# Manufacturers Products Section #}
+                    {% if app.user.customertype == 'Manufacturer' %}
+                        <div class="projectssection">
+                            <div class="sectionheading">
+                                <h2>Products</h2> 
+                            </div>
+                            <div class="Add-project-button">
+                                <a href="/manufacturer/add-product" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-plus" aria-hidden="true" style="font-size:15px;"></i> Add Product</a>
+                            </div>
+                            <!-- ArchitectProjects -->
+                            <div class="details">
+                                <div class="pro-projects">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Product Name</th>
+                                                <th>Edit</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for ProProduct in ProProducts %}
+                                                {% if ProProduct.Professional == ProProfile %}
+                                                    <tr>
+                                                        <td><input type="checkbox"></td>
+                                                        <td>
+                                                            <strong>{{ ProProduct.getProductName() }}</strong>
+                                                        </td>
+                                                        <td><a href="/account/Product/edit/{{ ProProduct.getkey() }}">EDIT</a></td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {# {% if form is defined and app.user.PortfolioActivate == 'true' and app.user.customertype != 'Manufacturer' %}
+                        <div class="requirements">
+                            <div class="sectionheading">
+                                <h2>Requirements</h2> 
+                            </div>
+                            <div class="requirementcontent">
+                                <p>Download Template Excel file given below and add your Requirements in the respective colums</p>
+                                <div class="Add-project-button" style="margin-left:0px;">
+                                    <a href="/static/files/Requirements-Template.xlsx" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa-solid fa-down" aria-hidden="true" style="font-size:15px;"></i> Download Template</a>
+                                </div>
+                                <h3>Add Requirements Sheet</h3>
+                                {{ form(form) }}
+                            </div>
+                        </div>
+                        {% endif %} #}
+                    </div> 
+                {% endif %}
+                {# Products Section End #}
+            </div>
+        </div>
+    </div>
+{% endblock %}

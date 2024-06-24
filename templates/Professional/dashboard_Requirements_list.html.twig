@@ -1,0 +1,90 @@
+{% extends 'layouts/arqonz_layout.html.twig' %}
+{% do pimcore_head_link().appendStylesheet('/static/css/arqonz_Prodashboard.css') %}
+
+{% block content %}
+    {% include 'Professional/dashboard_navigation.html.twig' %}
+
+    <div class="dashboard-container">
+        <div class="left-column" style="width: 100%; height: 100%; justify-content:center;">
+            <!-- Active Requirements -->
+            <div class="projectssection">
+                <div class="sectionheading">
+                    <h2>{{ customer.getcustomertype() }} Active Requirements</h2>
+                </div>
+                <div class="Add-project-button">
+                    <a href="/account/Add-Requirements" class="btn btn-lg btn-block btn-success btn" target="_blank">
+                        <i class="fa fa-plus" aria-hidden="true" style="font-size:15px;"></i> Add Requirements
+                    </a>
+                </div>
+                <div class="details">
+                    <div class="pro-projects">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Requirement Title</th>
+                                    <th>View</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if activeRequirements is not empty %}
+                                    {% for requirement in activeRequirements %}
+                                        {% if requirement.Professional == ProProfile %}
+                                            <tr>
+                                                <td><input type="checkbox"></td>
+                                                <td>
+                                                    <strong>{{ requirement.getTitle() }}</strong>
+                                                </td>
+                                                <td><a href="/account/Requirements/view/{{ requirement.getKey() }}">View</a></td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <tr><td colspan="3">No active requirements found.</td></tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Expired Requirements -->
+            <div class="projectssection">
+                <div class="sectionheading">
+                    <h2>{{ customer.getcustomertype() }} Expired Requirements</h2>
+                </div>
+                <div class="details">
+                    <div class="pro-projects">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Requirement Title</th>
+                                    <th>View</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if expiredRequirements is not empty %}
+                                    {% for requirement in expiredRequirements %}
+                                        {% if requirement.Professional == ProProfile %}
+                                            <tr>
+                                                <td><input type="checkbox"></td>
+                                                <td>
+                                                    <strong>{{ requirement.getTitle() }}</strong>
+                                                </td>
+                                                <td><a href="/account/Requirements/view/{{ requirement.getKey() }}">View</a></td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <tr><td colspan="3">No expired requirements found.</td></tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}
