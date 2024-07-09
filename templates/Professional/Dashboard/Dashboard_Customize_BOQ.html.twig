@@ -1,0 +1,222 @@
+{% extends 'layouts/UserDashboard_layout.html.twig' %}
+
+{% block content %}
+    <div class="BOQ-products">
+        <h2>BOQ Listing</h2>
+        <div class="sortRowoptions">
+            <div class="productsFound">
+                <p><b>261 Products</b> found</p>
+            </div>
+            <div class="SortByCols">
+                <div class="SortCol Sorttxt">
+                    <p><b>SORT BY</b></p>
+                </div>
+                <div class="SortCol unit">
+                    <p>UNIT</p>
+                </div>
+                <div class="SortCol Size">
+                    <p>Size</p>
+                </div>
+                <div class="SortCol Qty">
+                    <p>Qty</p>
+                </div>
+                <div class="SortCol rating">
+                    <p>Rating</p>
+                </div>
+                <div class="SortCol price">
+                    <p>Price</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="CustProdWrapper">
+            <div class="CustProdCard">
+                <div class="BOQProdCol1">
+                    <div class="BOQprodimage">
+                        <img src="/static/images/NewProdFeature.png" alt="BOQ_ProductImage">
+                    </div>
+                    
+                </div>
+                <div class="BOQProdRightCOL">
+                    <div class="BOQProdCol BOQProductMeta">
+                        <div class="prodnameBrand">
+                            <h3 class="BoqProdName">CEMENT</h3>
+                            <p class="currBrandName">Ambuja</p>
+                        </div>
+                        <div class="optionsicons">
+                        <img src="/static/icons/tagicon1.svg" alt="">
+                        <div class="livetracking">
+                            <img src="/static/icons/livetrackingIcon.svg" alt="">
+                        </div>
+                    </div>
+                    </div>
+                    <div class="BOQProdCol">
+                        <p class="BOQProdUnit">Bag</p>
+                    </div>
+                    <div class="BOQProdCol">
+                        <p class="BOQProdSize">50 Kg</p>
+                    </div>
+                    {# <div class="BOQProdCol">
+                        <p class="BOQProdCapacity">1000 bags/day</p>
+                    </div> #}
+                    <div class="BOQProdCol">
+                        <p class="BOQProdQuantity">5 Bags</p>
+                    </div>
+                    <div class="BOQProdCol">
+                        <p class="BOQProdPrice">4.6</p>
+                    </div>
+                    <div class="BOQProdCol">
+                        <p class="BOQProdStock">₹560/bag</p>
+                    </div>
+                    {# <div class="BOQProdCol">
+                        <p class="BOQProdStock">100 in Stock</p>
+                    </div> #}
+                    <div class="BOQCustomize_Options BOQCustomizeopts">
+                        <p class="CustomizeOption BOQCustomizeOption" data-option="brands">Available brands</p>
+                        <p class="CustomizeOption BOQCustomizeOption" data-option="specifications">Specifications</p>
+                        <p class="CustomizeOption BOQCustomizeOption" data-option="size">Available Size</p>
+                        <p class="QuoteNowBtn" >Quote Now</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="customizationDetails" data-type="brands" style="display: none;">
+                <!-- Content will be dynamically filled by JavaScript -->
+            </div>
+            <div class="customizationDetails" data-type="specifications" style="display: none;">
+                <!-- Content will be dynamically filled by JavaScript -->
+            </div>
+            <div class="customizationDetails" data-type="size" style="display: none;">
+                <!-- Content will be dynamically filled by JavaScript -->
+            </div>
+        </div>
+
+        
+        
+        {# <table class="requirements-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Reserve</th>
+                    <th>Min Dec</th>
+                    <th>Unit</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in ProRequirementProducts %}
+                    <tr class="requirement-item">
+                        <td>{{ product.getKey()|default('N/A') }}</td>
+                        <td>{{ product.getProductName()|default('N/A') }}</td>
+                        <td>{{ product.getProductCategory()|default('N/A') }}</td>
+                        <td>{{ product.getQuantity()|default('N/A') }}</td>
+                        <td>{{ product.getMinimumReserve()|default('N/A') }}</td>
+                        <td>{{ product.getMinDec()|default('N/A') }}</td>
+                        <td>{{ product.getUnit()|default('N/A') }}</td>
+                        <td>
+                            <button class="details-button" 
+                                data-productkey="{{ product|default('N/A') }}" 
+                                data-productname="{{ product.getProductName()|default('N/A') }}"  
+                                data-minimumreserve="{{ product.getMinimumReserve()|default('N/A') }}" 
+                                data-bidmindec="{{ product.getMinDec()|default('N/A') }}">BID</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table> #}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const options = document.querySelectorAll('.CustomizeOption');
+            options.forEach(option => {
+                option.addEventListener('click', function () {
+                    const optionType = this.getAttribute('data-option');
+                    const customizeProductWrapper = this.closest('.CustProdWrapper');
+                    const productName = customizeProductWrapper.querySelector('.BoqProdName').textContent.trim();
+                    const currentBrand = customizeProductWrapper.querySelector('.currBrandName').textContent.trim();
+
+                    const detailSection = customizeProductWrapper.querySelector(`.customizationDetails[data-type="${optionType}"]`);
+                    if (detailSection) {
+                        if (detailSection.style.display === 'block') {
+                            detailSection.style.display = 'none';
+                        } else {
+                            const detailSections = customizeProductWrapper.querySelectorAll('.customizationDetails');
+                            detailSections.forEach(section => {
+                                section.style.display = 'none';
+                            });
+
+                            if (optionType === 'brands' || optionType === 'specifications' || optionType === 'size') {
+                                const xhr = new XMLHttpRequest();
+                                xhr.open('POST', '{{ path('fetch_brands_api') }}', true);
+                                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                                xhr.onload = function () {
+                                    if (xhr.status === 200) {
+                                        const options = JSON.parse(xhr.responseText);
+
+                                        let optionsList = '<ul>';
+                                        if (optionType === 'specifications') {
+                                            options.forEach(option => {
+                                                optionsList += `<li data-specification-number="${option.Specification_Number}">${option.Specifying_Factor}</li>`;
+                                            });
+                                        } else {
+                                            options.forEach(option => {
+                                                optionsList += `<li>${option}</li>`;
+                                            });
+                                        }
+                                        optionsList += '</ul>';
+                                        detailSection.innerHTML = optionsList + '<div class="nested-spec-options"></div>';
+                                        detailSection.style.display = 'block';
+
+                                        if (optionType === 'specifications') {
+                                            const specItems = detailSection.querySelectorAll('li');
+                                            specItems.forEach(item => {
+                                                item.addEventListener('click', function () {
+                                                    const specNumber = this.getAttribute('data-specification-number');
+                                                    const nestedSection = detailSection.querySelector('.nested-spec-options');
+                                                    nestedSection.innerHTML = ''; // Clear previous options
+
+                                                    const xhrSpec = new XMLHttpRequest();
+                                                    xhrSpec.open('POST', '{{ path('fetch_brands_api') }}', true);
+                                                    xhrSpec.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                                                    xhrSpec.onload = function () {
+                                                        if (xhrSpec.status === 200) {
+                                                            const specOptions = JSON.parse(xhrSpec.responseText);
+                                                            let specOptionsList = '<ul>';
+                                                            specOptions.forEach(specOption => {
+                                                                specOptionsList += `<li>${specOption}</li>`;
+                                                            });
+                                                            specOptionsList += '</ul>';
+                                                            nestedSection.innerHTML = specOptionsList;
+                                                        }
+                                                    };
+                                                    const requestData = `product_type=${encodeURIComponent(productName)}&option_type=specification_values&specification_number=${encodeURIComponent(specNumber)}`;
+                                                    xhrSpec.send(requestData);
+                                                });
+                                            });
+                                        }
+                                    }
+                                };
+
+                                let requestData = `product_type=${encodeURIComponent(productName)}`;
+                                if (optionType === 'size') {
+                                    requestData += `&option_type=${encodeURIComponent(optionType)}&brand=${encodeURIComponent(currentBrand)}`;
+                                } else {
+                                    requestData += `&option_type=${encodeURIComponent(optionType)}`;
+                                }
+                                xhr.send(requestData);
+                            } else {
+                                detailSection.style.display = 'block';
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+    
+{% endblock %}

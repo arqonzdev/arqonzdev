@@ -28,7 +28,18 @@
                 </div>
                     <!-- ArchitectProjects -->
                 <div class="editform" style="padding:0px 20px">
-                    {{ form(form) }}
+                    {{ form_start(form) }}
+                        {{ form_row(form.ProjectName) }}
+                        {{ form_row(form.ProjectDescription) }}
+                        {{ form_row(form.ProjectGallery) }}
+                        {{ form_row(form.FloorMaps) }}
+                        {{ form_row(form.Location) }}
+                        {{ form_row(form.ReraApproval) }}
+                        {{ form_row(form.MinPrice) }}
+                        {{ form_row(form.Configuration) }}
+                        {{ form_row(form.PossessionStarts) }}
+                        {{ form_row(form.Collaborations) }}
+                    {{ form_end(form) }}
                 </div>
             </div> 
         </div>

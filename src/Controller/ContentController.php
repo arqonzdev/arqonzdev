@@ -115,6 +115,10 @@ use Razorpay\Api\Api;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Pimcore\Model\Asset;
 use Carbon\Carbon;
+use Pimcore\Db;
+use Psr\Log\LoggerInterface;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
 
 class ContentController extends BaseController
 {
@@ -559,6 +563,14 @@ class ContentController extends BaseController
             $customertype = $customer->getcustomertype();
             $architectProfile = null;
             $architectActivate = null;
+
+            $form1 = $this->createForm(SearchFormType::class);
+            $form1->handleRequest($request);
+            if ($form1->isSubmitted() && $form->isValid()) {
+                $formData1 = $form1->getData();
+                $searchKeyword = $form1->get('Search')->getData();
+                return $this->redirect("Search/$searchKeyword");
+            }
     
             
             if ($customertype === 'Customer'){
@@ -681,12 +693,15 @@ class ContentController extends BaseController
                         'customer' => $customer,
                         'form' => $form->createView(),
                         'Requirements' => $ProRequirements,
-                        'ProEnquiries' => $ProEnquiries,                       
+                        'ProEnquiries' => $ProEnquiries,
+                        'form1' => $form1->createView(),
+                                           
                     ]);
                 }
                 else{
                     return $this->render('account/dashboard.html.twig', [
                         'customer' => $customer,
+                        'form' => $form->createView(),
                     ]);
                 }
             }
@@ -722,6 +737,121 @@ class ContentController extends BaseController
         }
         return $tableData;
     }
+
+
+    /**
+     * @Route("BOQ/customize/{url}", name="BOQ_Customize")
+     */
+    public function BOQCustomizeAction($url, Security $security, Request $request, PaginatorInterface $paginator, MailerInterface $mailer)
+    {
+        $user = $security->getUser();
+    
+        if ($user && $this->isGranted('ROLE_USER')) {
+            $customer = $user;
+            // Load ArchitectProfile based on the URL
+            $ProRequirement = ProRequirement::getByPath("/Requirements/$url");
+
+            if (!$ProRequirement) {
+                throw $this->createNotFoundException('Requirement not found');
+            }
+
+            //Fetch pro RequirementProducts
+            $ProRequirementProducts = $ProRequirement->getProRequirementProduct();
+
+            $ProProfile = $ProRequirement->getProfessional();
+
+            
+            $form1 = $this->createForm(SearchFormType::class);
+            $form1->handleRequest($request);
+            if ($form1->isSubmitted() && $form->isValid()) {
+                $formData1 = $form1->getData();
+                $searchKeyword = $form1->get('Search')->getData();
+                return $this->redirect("Search/$searchKeyword");
+            }
+
+            
+            
+
+            return $this->render('Professional/Dashboard/Dashboard_Customize_BOQ.html.twig', [
+                'ProProfile' => $ProProfile,
+                'ProRequirement' => $ProRequirement,
+                'ProRequirementProducts' => $ProRequirementProducts,
+                'customer' => $customer,
+                'form1' => $form1->createView(),
+            ]);
+        }
+    
+        // If the user is not an architect or the architect is not activated
+        return $this->render('Architect/NotLogged_signup.html.twig');
+    }
+
+    /**
+     * @Route("BOQ/3D-product-demo", name="3d-Product-demo")
+     */
+    public function productdemo3d(Security $security, Request $request, PaginatorInterface $paginator, MailerInterface $mailer)
+    {
+        
+    
+        // If the user is not an architect or the architect is not activated
+        return $this->render('Professional/product-demo.html.twig');
+    }
+
+
+    /**
+     * @Route("/fetch-brands", name="fetch_brands_api", methods={"POST"})
+     */
+    public function fetchBrands(Request $request, LoggerInterface $logger): Response
+    {
+        try {
+            $dsn = 'mysql:host=localhost;dbname=pimcore;charset=utf8mb4';
+            $username = 'pimcoreuser';
+            $password = 'G0H0me@T0day';
+
+            $pdo = new \PDO($dsn, $username, $password);
+            $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+            $productType = $request->request->get('product_type');
+            $optionType = $request->request->get('option_type');
+
+            if ($optionType === 'brands') {
+                $sql = "SELECT DISTINCT Product_Brand FROM products WHERE Product_Name = :productType";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindValue(':productType', $productType);
+                $stmt->execute();
+                $options = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+            } elseif ($optionType === 'specifications') {
+                $sql = "SELECT Specification_Number, Specifying_Factor FROM product_specification WHERE Product_ID = (SELECT Product_ID FROM products WHERE Product_Name = :productType LIMIT 1)";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindValue(':productType', $productType);
+                $stmt->execute();
+                $options = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            } elseif ($optionType === 'size') {
+                $brand = $request->request->get('brand');
+                $sql = "SELECT DISTINCT Specification_1 FROM products WHERE Product_Name = :productType AND Product_Brand = :brand";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindValue(':productType', $productType);
+                $stmt->bindValue(':brand', $brand);
+                $stmt->execute();
+                $options = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+            } elseif ($optionType === 'specification_values') {
+                $specificationNumber = $request->request->get('specification_number');
+                $column = "Specification_" . $specificationNumber;
+                $sql = "SELECT DISTINCT $column FROM products WHERE Product_ID = (SELECT Product_ID FROM products WHERE Product_Name = :productType LIMIT 1)";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindValue(':productType', $productType);
+                $stmt->execute();
+                $options = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+            } else {
+                throw new \InvalidArgumentException('Invalid option type.');
+            }
+
+            return $this->json($options);
+        } catch (\Exception $e) {
+            $logger->error('Error fetching options: ' . $e->getMessage());
+            return new Response('Error fetching options: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 
 
@@ -1390,8 +1520,14 @@ class ContentController extends BaseController
                 $fieldName = $formField->getName();
         
                 // Exclude ProfileImage field
-                if ($fieldName !== 'ProjectGallery' && $fieldName !== '_submit' && $fieldName !== 'FloorMaps') {
+                if ($fieldName !== 'ProjectGallery' && $fieldName !== '_submit' && $fieldName !== 'FloorMaps' && $fieldName !== 'ReraApproval') {
                     $formField->setData($ProProject->{'get' . ucfirst($fieldName)}());
+                } elseif ($fieldName === 'ReraApproval') {
+                    // Convert the ReraApproval value to boolean
+                    $reraApprovalValue = $ProProject->getReraApproval();
+                    $reraApprovalBoolean = $reraApprovalValue === '1';
+                    // Set the form field with the boolean value
+                    $formField->setData($reraApprovalBoolean);
                 }
             }
             $form->handleRequest($request);

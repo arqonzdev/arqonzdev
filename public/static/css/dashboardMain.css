@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
 *{
     margin: 0;
     padding: 0;
@@ -41,6 +44,7 @@ a:hover{
     max-width: 307px;
     gap: 9px;
     padding-right: 16px;
+    padding-top: 30px;
 }
 .dashboardCol1 > * {
     width: 100%;
@@ -48,7 +52,7 @@ a:hover{
 .dashLogo{
     display: flex;
     justify-content: center;
-    margin: 19px 0px;
+    margin: 24px 25px;
 }
 
 /* DashboardLeftLCol */
@@ -59,17 +63,18 @@ a:hover{
     
 }
 .dashboardbutton a{
-    background-color: #1BA89D;
-    color: #fff;
+    background-color: #A6DFC7;
+    color: #485B55;
     display: flex;
     justify-content: center;
     align-items: center;
     min-width: 100%;
     min-height: 50px;
     border-radius: 6px;
-    font-size: 14px;
     letter-spacing: 0.3px;
     position: relative;
+    font-size: 16px;
+    font-weight: 600;
 }
 .dashboardbuttonLink span {
     position: absolute;
@@ -86,8 +91,7 @@ a:hover{
 .lefthighlighter{
     width:5px;
     min-height:100%;
-    background-color: #1BA89D;
-    background-color: #1BA89D;
+    background-color: #A6DFC7;
     border-radius: 0 41px 41px 0px;
 }
 .dashboardbuttonLink:hover{
@@ -109,12 +113,14 @@ a:hover{
     font-size: 14px;
 }
 .ProfileType a {
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 600;
     text-decoration: none;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 13px;
+    color: rgba(32, 34, 36, 0.80);
 
 }
 .dashboard-profiledetails{
@@ -146,25 +152,32 @@ a:hover{
 .dashboardPages{
     padding-left: 32px;
     padding-bottom: 40px;
-    border-bottom: 1px solid #D8D8D8;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    margin-top: 35px;
+}
+.dashboardCol1 hr {
+    background-color: rgba(32, 34, 36, 0.10);
+    height: 1px;
+    border: 0;
 }
 .dashboardPages h3{
     line-height: 61px;
-    font-size: 12px;
+    font-size: 18px;
+    font-weight:400;
     letter-spacing: 0.5px;
 }
-.dashboardPages .ProfileType a{
+/* .dashboardPages .ProfileType a{
     color: #202224;
-}
+} */
 .dashboardPages .ProfileType{
     min-height: 50px;
 }
 
 
 /* Dashboard navigation */
+
 .dashboardCol2{
     width: 100%;
 }
@@ -181,30 +194,29 @@ a:hover{
     min-height: 68px;
     justify-content: center;
     align-items: center;
-    gap: 80px;
 }
 .dashboard_navigation li{
     list-style: none;
 }
 .dashboard_navigation a{
     text-decoration: none;
-    font-size: 17px;
     color: #000000;
 }
 .DashboardContentArea{
     background-color: #F3FCFC;
     min-height: 100%;
     min-width: 100%;
-    padding: 30px 34px;
+    padding: 24px 32px;
     
 }
 .welcomeMessage p{
-    font-size: 31px;
-    font-weight: 500;
+    font-size: 32px;
+    font-weight: 700;
     letter-spacing: 0.8px;
+    font-family: 'Playfair Display';
 }
 .welcomeMessage {
-    margin: 9px 8px;
+    margin: 6px 8px;
 }
 
 /* Dashboard Contents Main */
@@ -217,13 +229,13 @@ a:hover{
 .quickstatCol1{
     display:flex;
     flex-direction: column;
-    gap:26px;
+    gap:13px;
 }
-.QuickStatIcon{
+/* .QuickStatIcon{
     padding: 12px;
     background-color: #e5e4fd;
     border-radius: 22px;
-}
+} */
 .dashboardQuickStats{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -234,9 +246,9 @@ a:hover{
 
 .DashboardQuickStatContainer{
     background-color: #fff;
-    padding: 24px 19px;
-    border-radius: 22px;
-    
+    padding: 14px 15px 7px 19px;
+    border-radius: 14px;
+    box-shadow: 6px 6px 54px 0px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
     gap: 26px;
@@ -247,26 +259,29 @@ a:hover{
     letter-spacing: 1px;
 }
 .quickstatCol1 h3{
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: 500;
     color: #636466;
 }
 .DashboardQuickStatContainer p{
-    font-size: 15px;
+    font-size: 18px;
+    font-weight: 500;
 }
 /* Dashboard Projects Area */
 .dashboardProjectsAreaContainer, .dashboardRequirementsAreaContainer, .dashboardEnquiriesAreaContainer{
     margin: 30px 0px;
     padding: 24px 19px;
     background-color: #fff;
-    border-radius: 22px;
+    border-radius: 14px;
 }
 .dashboardProjectsAreaContainer h3, .dashboardRequirementsAreaContainer h3, .dashboardEnquiriesAreaContainer h3{
     margin-bottom: 28px;
     font-size: 25px;
     font-weight: 400;
+    font-family: 'Playfair Display';
 }
 .DashboardProjects img{
-    border-radius: 13px;
+    border-radius: 10px;
 }
 .DashboardRequirements > .requirements-table, .DashboardEnquiries > .Enquiries-table {
     width: 100%;
@@ -282,11 +297,25 @@ a:hover{
 }
 .DashboardRequirements > .requirements-table thead th, .DashboardEnquiries > .Enquiries-table thead th{
     padding: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #202224;
+}
+.requirements-table td{
+    color: rgba(32, 34, 36, 0.8);
+    font-size: 16px;
+    font-weight: 500;
+    padding: 18px 0px;
+}
+.requirements-table td{
+    color: rgba(32, 34, 36, 0.8);
+    font-size: 16px;
+    font-weight: 500;
+    padding: 18px 0px;
 }
 .DashboardRequirements > .requirements-table h3{
     margin:0;
     padding: 30px 0px;
-    font-size: 16px;
     color: #000;
 }
 .DashboardRequirements table, .DashboardEnquiries table{
@@ -300,16 +329,24 @@ a:hover{
 .DashboardEnquiries > .Enquiries-table td{
     margin:0;
     padding: 30px 0px;
-    color: #000;
+    color: rgba(32, 34, 36, 0.8);
+    font-size: 16px;
+    font-weight: 500;
+    padding: 18px 0px;
 }
 .requirementTitle {
-    color: #000;
+    text-decoration: none;
+    color: rgba(32, 34, 36, 0.8);
 }
+
 .details-button{
-    padding: 5px 10px;
     color: #fff;
     background-color: #00B69B;
-    border-radius: 18px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+    padding: 2px 11px;
+
 }
 .details-button:hover{
     color: #fff;
@@ -327,11 +364,11 @@ tbody tr{
     justify-content: center;
     align-items: center;
 }
-.addprojectbutton a{
+/* .addprojectbutton a{
     padding: 20px 23px;
     border: 1px solid #000;
     border-radius: 115px;
-}
+} */
 .EnquiryID{
     max-width: 30px;
 }
@@ -360,7 +397,7 @@ tbody tr{
     position: absolute;
     right: -5px;
     top: -11px;
-    padding: 2px 4px;
+    padding: 2px 6px;
     border-radius: 29px;
     font-size: 13px;
     background-color: #404040;
@@ -394,3 +431,293 @@ tbody tr{
 .notificationBtnCont:hover {
     cursor: pointer;
 }
+
+/* BOQ Page Buttons */
+
+.Boq-Start-btn{
+    padding: 4px 29px;
+    border: #1BA89D solid 1px;
+    border-radius: 22px;
+    color: #000;
+    font-weight: 600;
+}
+.Boq-Start-btn:hover {
+    background-color: #1BA89D;
+    color: #fff;
+}
+.quick-bid-btn{
+    color: #000;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+/* BOQ Listing and Customize Page */
+
+.customizeProduct{
+    display: flex;
+    gap: 20px;
+    padding: 20px 20px;
+    border-radius: 7px;
+    border: 1px solid #00000029;
+    background-color: #fff;
+}
+.customizeProduct:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.BOQProductdetails{
+    width: 100%;
+}
+
+.SpecificationsContainer{
+    display: flex;
+    gap: 40px;
+}
+.BOQCustomize_Options{
+    display: flex;
+    gap: 30px;
+}
+.BOQProductdetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.specTitle {
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.CustomizeOption {
+    text-transform: uppercase;
+    border: #1BA89D solid 1px;
+    padding: 5px 10px;
+    border-radius: 6px;
+}
+.CustomizeOption:hover {
+    cursor: pointer;
+}
+.BoqProductName {
+    text-transform: uppercase;
+}
+.DashboardContentArea h2{
+    font-family: 'Playfair Display';
+    font-size: 33px;
+    margin-bottom: 26px;
+}
+.quickstatCol1 h2{
+    font-family: "Poppins", sans-serif;
+    margin-bottom: 0;
+    font-size: 28px;
+    font-weight: 600;
+}
+.customizationDetails {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+.customizeProductWrapper {
+    margin: 20px 0px;
+}
+.BOQProductMeta{
+    display: flex;
+    flex-direction: column;
+}
+/* Temp CSS */
+.customizationDetails li{
+    list-style: none;
+    padding: 10px 20px;
+    border: 1px solid #48a99d;
+    text-transform: uppercase;
+}
+.customizationDetails li:hover{
+    color: #fff;
+    background-color: #48a99d;
+    border: 1px solid #48a99d;
+    cursor: pointer;
+}
+.customizationDetails ul {
+    display: flex;
+    gap: 21px;
+    flex-wrap: wrap;
+}
+
+/* NewCustomizeCSS */
+.CustProdCard{
+    display: flex;
+    gap: 20px;
+}
+.BOQProdCol1{
+    flex: 0 0 215px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.optionsicons{
+    display: flex;
+    align-items: center;
+}
+.livetracking {
+    margin-top: 8px;
+}
+.BOQProdRightCOL {
+    display: flex;
+    width: 100%;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+}
+.BOQCustomizeopts {
+    display: flex;
+    position: absolute;
+    bottom: -15px;
+    right: -17px;
+    gap: 30px;
+    align-items: center;
+}
+.BOQProdCol {
+    flex: 0 0 16.5%;
+    display: flex;
+    justify-content: center;
+}
+.BOQProductMeta{
+    min-width: 142px;
+    gap: 7px;
+}
+
+.CustProdCard {
+    padding: 15px 17px;
+    border: solid 1px #DDDDDD;
+    background: #fff;
+}
+.BoqProdName {
+    text-transform: uppercase;
+}
+.QuoteNowBtn {
+    padding: 7px 18px;
+    background-color: #A6DFC7;
+}
+
+/* Search Input CSS */
+
+.search-container {
+    display: flex;
+    align-items: center;
+    border-radius: 8px;    
+    background-color: #fff;
+    margin-left: 37px;
+    margin-right: 10px;
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.20);
+    padding-left: 27px;
+}
+
+.search-icon {
+    font-size: 20px;
+    display: flex;
+    background-color: #A6DFC7;
+    padding: 10px 6px;
+    border-radius: 0px 5px 5px 0px;    
+}
+
+.search-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    font-weight: 300;
+    background: none;
+    color: rgba(32, 34, 36, 0.70);
+}
+
+.search-input::placeholder {
+    color: #888;
+}
+
+.search-container:hover,
+.search-container:focus-within {
+    border-color: #666;
+    
+}
+
+/* Search End */
+
+/* DashboardNew Navigation*/
+
+.dashboardrow1{
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    background-color: #F0F9F9;
+}
+.locationContainer{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.Loccity p{
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 8px;
+}
+.Locpincode p{
+    font-size: 12px;
+}
+.dashboardrow2 .dashboard_navigation{
+    background-color: #A6DFC7;
+    height: 44px;
+    align-items: center;
+}
+.dashboardrow2 .dashboard_navigation a{
+    color: rgba(32, 34, 36, 0.80);
+    font-size: 18px;
+    font-weight: 500;
+}
+.dashboardrow2 .dashboard_navigation > ul {
+    gap: 26px;
+}
+.ProfileLi {
+    display:flex;
+    align-items: center;
+    gap: 7px;
+}
+.ProfileLi img {
+    width: 45.581px;
+    height: 45.581px;
+}
+.ProfileLi h3 {
+    font-size: 14px;
+    font-weight: 700;
+}
+.ProfileLi p {
+    font-size: 12px;
+    font-weight: 600;
+}
+.Locpincode p {
+    color: rgba(32, 34, 36, 0.70);
+}
+
+/* Sorting Row */
+.sortRowoptions{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+.SortByCols{
+    display: flex;
+}
+.productsFound {
+    width: 273px;
+}
+.SortByCols {
+    width: 100%;
+}
+.SortCol{
+    flex: 0 0 16.5%;
+}
+.SortCol P{
+    text-align: center;
+}
+.nested-spec-options{
+    margin-top: 25px;
+}
+
