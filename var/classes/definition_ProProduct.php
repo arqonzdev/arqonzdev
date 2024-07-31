@@ -15,6 +15,13 @@
  * - ParentCategory [input]
  * - SubSubCategory [input]
  * - SubCategory [input]
+ * - ProductType [input]
+ * - ProductBrand [input]
+ * - Material [textarea]
+ * - Price [input]
+ * - Unit [input]
+ * - Tags [textarea]
+ * - SupplierBid [reverseObjectRelation]
  */
 
 return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
@@ -24,7 +31,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'title' => '',
    'description' => '',
    'creationDate' => NULL,
-   'modificationDate' => 1712380483,
+   'modificationDate' => 1721882022,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -352,6 +359,216 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'showCharCount' => false,
              'width' => '',
              'defaultValueGenerator' => '',
+          )),
+          10 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'ProductType',
+             'title' => 'Product Type',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => NULL,
+             'columnLength' => 190,
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
+             'unique' => false,
+             'showCharCount' => false,
+             'width' => '',
+             'defaultValueGenerator' => '',
+          )),
+          11 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'ProductBrand',
+             'title' => 'Product Brand',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => NULL,
+             'columnLength' => 190,
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
+             'unique' => false,
+             'showCharCount' => false,
+             'width' => '',
+             'defaultValueGenerator' => '',
+          )),
+          12 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Textarea::__set_state(array(
+             'name' => 'Material',
+             'title' => 'Material',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'maxLength' => NULL,
+             'showCharCount' => false,
+             'excludeFromSearchIndex' => false,
+             'height' => '',
+             'width' => '',
+          )),
+          13 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'Price',
+             'title' => 'Price',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => NULL,
+             'columnLength' => 190,
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
+             'unique' => false,
+             'showCharCount' => false,
+             'width' => '',
+             'defaultValueGenerator' => '',
+          )),
+          14 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'Unit',
+             'title' => 'Unit',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => NULL,
+             'columnLength' => 190,
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
+             'unique' => false,
+             'showCharCount' => false,
+             'width' => '',
+             'defaultValueGenerator' => '',
+          )),
+          15 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Textarea::__set_state(array(
+             'name' => 'Tags',
+             'title' => 'Tags',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'maxLength' => NULL,
+             'showCharCount' => false,
+             'excludeFromSearchIndex' => false,
+             'height' => '',
+             'width' => '',
+          )),
+          16 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\ReverseObjectRelation::__set_state(array(
+             'name' => 'SupplierBid',
+             'title' => 'Supplier Bid',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => true,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'classes' => 
+            array (
+            ),
+             'displayMode' => NULL,
+             'pathFormatterClass' => '',
+             'maxItems' => NULL,
+             'visibleFields' => 'id,key,fullpath,ProductName,ProductBrand,BidAmount,EndDate',
+             'allowToCreateNewObject' => false,
+             'allowToClearRelation' => true,
+             'optimizedAdminLoading' => false,
+             'enableTextSelection' => false,
+             'visibleFieldDefinitions' => 
+            array (
+            ),
+             'width' => '',
+             'height' => '',
+             'ownerClassName' => 'SupplierBid',
+             'ownerClassId' => NULL,
+             'ownerFieldName' => 'ProRequirementProduct',
+             'lazyLoading' => true,
           )),
         ),
          'locked' => false,

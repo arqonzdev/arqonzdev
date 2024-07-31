@@ -8,13 +8,20 @@
  * - ProductName [input]
  * - ProductCategory [input]
  * - ProRequirement [manyToOneRelation]
+ * - EndDate [datetime]
  * - Quantity [input]
  * - Unit [input]
  * - MinimumReserve [input]
  * - MinDec [input]
  * - CurrentBid [input]
- * - ProProposalBid [reverseObjectRelation]
+ * - SupplierBid [reverseObjectRelation]
  * - customer [manyToOneRelation]
+ * - Brand [input]
+ * - Material [input]
+ * - Description [textarea]
+ * - ObjKey [calculatedValue]
+ * - SelectedBid [manyToOneRelation]
+ * - QuoteStatus [input]
  */
 
 return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
@@ -24,7 +31,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'title' => '',
    'description' => '',
    'creationDate' => NULL,
-   'modificationDate' => 1718017464,
+   'modificationDate' => 1721882107,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -170,6 +177,30 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'width' => '',
           )),
           3 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Datetime::__set_state(array(
+             'name' => 'EndDate',
+             'title' => 'End Date',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => NULL,
+             'useCurrentDate' => false,
+             'columnType' => 'bigint(20)',
+             'defaultValueGenerator' => '',
+          )),
+          4 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
              'name' => 'Quantity',
              'title' => 'Quantity',
@@ -199,7 +230,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'width' => '',
              'defaultValueGenerator' => '',
           )),
-          4 => 
+          5 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
              'name' => 'Unit',
              'title' => 'Unit',
@@ -229,7 +260,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'width' => '',
              'defaultValueGenerator' => '',
           )),
-          5 => 
+          6 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
              'name' => 'MinimumReserve',
              'title' => 'Minimum Reserve',
@@ -259,7 +290,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'width' => '',
              'defaultValueGenerator' => '',
           )),
-          6 => 
+          7 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
              'name' => 'MinDec',
              'title' => 'Min Dec',
@@ -289,7 +320,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'width' => '',
              'defaultValueGenerator' => '',
           )),
-          7 => 
+          8 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
              'name' => 'CurrentBid',
              'title' => 'Current Bid',
@@ -319,10 +350,10 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'width' => '',
              'defaultValueGenerator' => '',
           )),
-          8 => 
+          9 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\ReverseObjectRelation::__set_state(array(
-             'name' => 'ProProposalBid',
-             'title' => 'Pro Proposal Bid',
+             'name' => 'SupplierBid',
+             'title' => 'SupplierBid',
              'tooltip' => '',
              'mandatory' => false,
              'noteditable' => false,
@@ -344,9 +375,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'displayMode' => NULL,
              'pathFormatterClass' => '',
              'maxItems' => NULL,
-             'visibleFields' => 
-            array (
-            ),
+             'visibleFields' => 'id,BidAmount,ProductName,EndDate',
              'allowToCreateNewObject' => false,
              'allowToClearRelation' => true,
              'optimizedAdminLoading' => false,
@@ -356,12 +385,12 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
             ),
              'width' => '',
              'height' => '',
-             'ownerClassName' => 'ProProposalBid',
+             'ownerClassName' => 'SupplierBid',
              'ownerClassId' => NULL,
              'ownerFieldName' => 'ProRequirementProduct',
              'lazyLoading' => true,
           )),
-          9 => 
+          10 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation::__set_state(array(
              'name' => 'customer',
              'title' => 'Customer',
@@ -402,6 +431,189 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
             array (
             ),
              'width' => '',
+          )),
+          11 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'Brand',
+             'title' => 'Brand',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => NULL,
+             'columnLength' => 190,
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
+             'unique' => false,
+             'showCharCount' => false,
+             'width' => '',
+             'defaultValueGenerator' => '',
+          )),
+          12 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'Material',
+             'title' => 'Material',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => NULL,
+             'columnLength' => 190,
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
+             'unique' => false,
+             'showCharCount' => false,
+             'width' => '',
+             'defaultValueGenerator' => '',
+          )),
+          13 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Textarea::__set_state(array(
+             'name' => 'Description',
+             'title' => 'Description',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'maxLength' => NULL,
+             'showCharCount' => false,
+             'excludeFromSearchIndex' => false,
+             'height' => '',
+             'width' => '',
+          )),
+          14 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\CalculatedValue::__set_state(array(
+             'name' => 'ObjKey',
+             'title' => 'Obj Key',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'elementType' => 'input',
+             'calculatorType' => 'class',
+             'calculatorExpression' => '',
+             'calculatorClass' => '@App\\Controller\\KeyCalculator',
+             'columnLength' => 190,
+             'width' => '',
+          )),
+          15 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation::__set_state(array(
+             'name' => 'SelectedBid',
+             'title' => 'Selected Bid',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => true,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'classes' => 
+            array (
+              0 => 
+              array (
+                'classes' => 'SupplierBid',
+              ),
+            ),
+             'displayMode' => 'grid',
+             'pathFormatterClass' => '',
+             'assetInlineDownloadAllowed' => false,
+             'assetUploadPath' => '',
+             'allowToClearRelation' => true,
+             'objectsAllowed' => true,
+             'assetsAllowed' => false,
+             'assetTypes' => 
+            array (
+            ),
+             'documentsAllowed' => false,
+             'documentTypes' => 
+            array (
+            ),
+             'width' => '',
+          )),
+          16 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'QuoteStatus',
+             'title' => 'Quote Status',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => 'none',
+             'columnLength' => 190,
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
+             'unique' => false,
+             'showCharCount' => false,
+             'width' => '',
+             'defaultValueGenerator' => '',
           )),
         ),
          'locked' => false,

@@ -19,8 +19,15 @@
                 {{ form_row(form.categories, {'attr': {'class': 'js-select-cities', 'value': 'categories', 'id': 'cities-select'}}) }}
         </div> #}
         {{ form_row(form.ProductName) }}
+        
+        {{ form_row(form.ProductBrand) }}
+        {{ form_row(form.ProductMaterial) }}
         {{ form_row(form.ProductDescription) }}
         {{ form_row(form.ProductImage) }}
+        {{ form_row(form.ProductPrice) }}
+        {{ form_row(form.ProductUnit) }}
+        {{ form_row(form.ProductTags) }}
+
         {{ form_row(form.Specifications) }}
         <b>Parent Category:</b>
         {{ form_row(form.ParentCategory) }}
@@ -162,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
         alert('Project Submitted'); // Display a confirmation message
 
         // Redirect to the specified link after the alert is shown
-        window.location.href = 'http://localhost:8001/en/account/index';
+        window.location.href = '/en/account/index';
     } else {
         // Handle the error case if needed
         console.error('Error submitting the form');
@@ -311,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function () {
         alert('Project Submitted'); // Display a confirmation message
 
         // Redirect to the specified link after the alert is shown
-        window.location.href = 'http://localhost:8001/en/account/index';
+        window.location.href = '/en/account/index';
     } else {
         // Handle the error case if needed
         console.error('Error submitting the form');
@@ -475,7 +482,7 @@ document.addEventListener('DOMContentLoaded', function () {
         alert('Project Submitted'); // Display a confirmation message
 
         // Redirect to the specified link after the alert is shown
-        window.location.href = 'http://localhost:8001/en/account/index';
+        window.location.href = '/en/account/index';
     } else {
         // Handle the error case if needed
         console.error('Error submitting the form');
@@ -530,7 +537,7 @@ $(document).ready(function() {
         }
 
         // Fetch JSON data and populate parent category dropdown
-        fetch('http://arqonz.in/static/files/Product-Categories.json')
+        fetch('/static/files/Product-Categories.json')
             .then(response => response.json())
             .then(data => {
                 const parentCategoryDropdown = $('#add_product_form_ParentCategory');
@@ -547,7 +554,7 @@ $(document).ready(function() {
             subSubCategoryDropdown.empty().append('<option value="">Choose an option</option>');
 
             // Populate subcategory dropdown based on selected parent category
-            fetch('http://arqonz.in/static/files/Product-Categories.json')
+            fetch('/static/files/Product-Categories.json')
                 .then(response => response.json())
                 .then(data => {
                     const selectedParentCategory = data.categories.find(category => category.name === selectedParentCategoryName);
@@ -565,7 +572,7 @@ $(document).ready(function() {
             subSubCategoryDropdown.empty().append('<option value="">Choose an option</option>');
 
             // Populate sub-subcategory dropdown based on selected subcategory
-            fetch('http://arqonz.in/static/files/Product-Categories.json')
+            fetch('/static/files/Product-Categories.json')
                 .then(response => response.json())
                 .then(data => {
                     const selectedParentCategory = data.categories.find(category =>

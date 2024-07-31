@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 end: 'bottom bottom',
                 scrub: true, // Scrub makes the animation smooth
                 pin: true,
-                markers: true,
+                
                 stagger: true,
                 onUpdate: (self) => {
                     if (self.progress === 1) {

@@ -1,0 +1,54 @@
+{% extends 'layouts/arqonz_layout.html.twig' %}
+{% do pimcore_head_link().appendStylesheet('/static/css/arqonz_Prodashboard.css') %}
+
+
+{% block content %}
+    {% include 'Professional/dashboard_navigation.html.twig' %}
+
+    <div class="dashboard-container">
+        <div class="left-column" style="width: 100%; justify-content:center;">
+            <!-- ArchitectProjects -->
+            <div class="projectssection">
+                <div class="sectionheading">
+                <h2>{{ customer.getcustomertype() }} Products</h2> 
+                </div>
+                <div class="Add-project-button">
+                    <a href="/manufacturer/add-product" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-plus" aria-hidden="true" style="font-size:15px;"></i> Add Product</a>    
+                </div>
+                    <!-- ArchitectProjects -->
+                <div class="details">
+                    <div class="pro-projects">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Product Name</th>
+                                    <th>Brand</th>
+                                    <th>Edit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ProProduct in ProProducts %}
+                                    {% if ProProduct.Professional == ProProfile %}
+                                        <tr>
+                                            <td><input type="checkbox"></td>
+                                            <td>
+                                                <strong>{{ ProProduct.getProductName() }}</strong>
+                                            </td>
+                                            <td>
+                                                {{ ProProduct.getProductBrand() }}
+                                            </td>
+                                            <td><a href="/account/Product/edit/{{ ProProduct.getKey() }}">EDIT</a></td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            
+            </div> 
+        </div>
+    
+    
+{% endblock %}

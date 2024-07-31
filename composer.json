@@ -18,6 +18,7 @@
   "require": {
     "chrome-php/chrome": "^1.6",
     "doctrine/dbal": "^3.8",
+    "dompdf/dompdf": "^3.0",
     "gotenberg/gotenberg-php": "^1.1",
     "php-http/guzzle7-adapter": "^0.1.1",
     "php-http/httplug-bundle": "^1",
@@ -33,7 +34,8 @@
     "razorpay/razorpay": "^2.9",
     "symfony/dotenv": "^6.2",
     "symfony/intl": "^6.2",
-    "symfony/runtime": "^6.2"
+    "symfony/runtime": "^6.2",
+    "tecnickcom/tcpdf": "^6.7"
   },
   "suggest": {
     "pimcore/elasticsearch-client": "Required for Elastic Search service"

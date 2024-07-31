@@ -30,9 +30,11 @@ use Pimcore\Model\DataObject\ProNotification;
 use Pimcore\Model\DataObject\Customer;
 use Pimcore\Model\DataObject\ProRequirementProduct;
 use Pimcore\Model\DataObject\ProProposalBid;
+use Pimcore\Model\DataObject\SupplierBid;
 //use App\Model\Customer;
 use Pimcore\Model\DataObject\ProRequirement;
 use Pimcore\Model\DataObject\ManufacturerRefferal;
+use Pimcore\Model\DataObject\SupplierPinnedNotification;
 use Pimcore\Model\DataObject\ProProposal;
 use Pimcore\Model\DataObject\ProProduct;
 use Pimcore\Model\DataObject\NewsLetter;
@@ -119,6 +121,14 @@ use Pimcore\Db;
 use Psr\Log\LoggerInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+// TCPDF
+use TCPDF;
+// DOMPDF
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use DateTimeZone;
+
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ContentController extends BaseController
 {
@@ -194,7 +204,7 @@ class ContentController extends BaseController
         // you can also set the header via code 
         $this->addResponseHeader('X-Custom-Header3', ['foo', 'bar']);
 
-        return $this->render('content/portal.html.twig', [
+        return $this->render('Professional/home-demo.html.twig', [
             'isPortal' => true,
             'form' => $form->createView(),
             'form1' => $form1->createView(), 
@@ -426,143 +436,6 @@ class ContentController extends BaseController
             $customertype = $customer->getcustomertype();
             $architectProfile = null;
             $architectActivate = null;
-    
-            
-            if ($customertype === 'Customer'){
-
-                return $this->render('account/customer_dashboard.html.twig', [
-                    'customer' => $customer,
-                ]);
-            }
-            elseif ($customertype === 'Contractor' || $customertype === 'Engineer' || $customertype === 'Designer' || $customertype === 'Architect' || $customertype === 'Builder' || $customertype === 'Manufacturer' || $customertype === 'Distributor' || $customertype === 'Retailer'){
-                
-                $PortfolioActivate = $customer->getPortfolioActivate();
-                if($PortfolioActivate === 'true'){
-                    $ProProfiles = $customer->getPortfolio();
-                    $ProProfile = $ProProfiles[0];
-                    
-
-                    if($ProProfile){
-                    
-                        $NotificationList = new \Pimcore\Model\DataObject\ProNotification\Listing();
-                        $NotificationList->addConditionParam("professional = ?", $ProProfile);
-            
-                        $NotificationList->setOrderKey('creationDate');
-                        $NotificationList->setOrder('desc');
-        
-                        $ProProjectsList = new \Pimcore\Model\DataObject\ProProject\Listing();
-                        $ProProjectsList->addConditionParam("ProfessionalPath = ?", $ProProfile);
-
-                        $ProProjectsList->setOrderKey('creationDate');
-                        $ProProjectsList->setOrder('desc');
-
-                        $ProProjects = $ProProjectsList->load();
-
-                        $ProProducts = new \Pimcore\Model\DataObject\ProProduct\Listing();
-                        $ProProducts->addConditionParam("ProfessionalPath = ?", $ProProfile);
-
-                        $ProProducts->setOrderKey('creationDate');
-                        $ProProducts->setOrder('desc');
-
-                        $ProProducts = $ProProducts->load();
-
-                        $form = $this->createForm(ProRequirementFormType::class);
-                        $form->handleRequest($request);
-
-                        if ($form->isSubmitted() && $form->isValid()) {
-                            // Handle file upload and save the ProRequirement object
-
-                            $uploadedFile = $form->get('excelFile')->getData();
-                            $proRequirement = new ProRequirement();
-
-                
-                            try {
-                                $asset = new Document();
-                                $asset->setData(file_get_contents($uploadedFile->getPathname()));
-                                $timestamp = time();
-                                $originalFilename = $uploadedFile->getClientOriginalName();
-                                $newFilename = $timestamp . '_' . $originalFilename;
-                                $asset->setFilename($newFilename); // Set the desired filename
-
-                                // Save the asset in the "/Services/Requirements" directory
-                                if ($customertype === 'Contractor'){
-                                    $asset->setParent(\Pimcore\Model\Asset::getByPath("/Services/Contractors/Requirements"));
-                                    }
-                                elseif ($customertype === 'Designer'){
-                                    $asset->setParent(\Pimcore\Model\Asset::getByPath("/Services/Designers/Requirements"));
-                                    }
-                                elseif ($customertype === 'Architect'){
-                                    $asset->setParent(\Pimcore\Model\Asset::getByPath("/Services/Architects/Requirements"));
-                                    }
-                                elseif ($customertype === 'Builder'){
-                                    $asset->setParent(\Pimcore\Model\Asset::getByPath("/Services/Builders/Requirements"));
-                                    }
-                                
-                                $asset->save();
-                                $proRequirement->setExcelFile($asset);
-                                $proRequirement->setKey(time());
-                                $proRequirement->setParent(Service::createFolderByPath('/Requirements'));
-                                $proRequirement->setTitle($form->get('Title')->getData());
-                                
-                                $proRequirement->setDescription($form->get('Description')->getData());
-                                $proRequirement->setProfessional($ProProfile);
-                                $proRequirement->setProfessionalPath($ProProfile);
-                                $excelData = $this->processExcelData($uploadedFile);
-                                $proRequirement->setExcelData($excelData);
-                                $proRequirement->setPublished(true);
-                
-                                $proRequirement->save();
-            
-                                // Redirect or do other actions
-                                $this->addFlash('success', $translator->trans('Requirements submitted succesfully.'));
-                            } catch (FileException $e) {
-                                // Handle file upload error
-                                // Log the error or show a flash message to the user
-                            }
-                        }
-                    }
-
-                    
-                    return $this->render('account/dashboard.html.twig', [
-                        'ProProfile' => $ProProfile,
-                        'ProProjects' => $ProProjects,
-                        'ProProducts' => $ProProducts,
-                        'customer' => $customer,
-                        'form' => $form->createView(),                       
-                    ]);
-                }
-                else{
-                    return $this->render('account/dashboard.html.twig', [
-                        'customer' => $customer,
-                    ]);
-                }
-            }
-        }
-    
-        // If the user is not an architect or the architect is not activated
-        return $this->render('Architect/NotLogged_signup.html.twig');
-    }
-
-
-
-    /**
-     * Index page for account - it is restricted to ROLE_USER via security annotation
-     *
-     * @Route("/account/indexNew", name="account-indexNew")
-     * @param Request $request
-     * @param UserInterface|null $user
-     *
-     * @return Response
-     */
-    public function architectDashboardActionNew(Request $request, Security $security, Translator $translator)
-    {
-        $user = $security->getUser();
-    
-        if ($user && $this->isGranted('ROLE_USER')) {
-            $customer = $user;
-            $customertype = $customer->getcustomertype();
-            $architectProfile = null;
-            $architectActivate = null;
 
             $form1 = $this->createForm(SearchFormType::class);
             $form1->handleRequest($request);
@@ -673,6 +546,446 @@ class ContentController extends BaseController
                         $ProRequirementsList->setOrder('desc');
 
                         $ProRequirements = $ProRequirementsList->load();
+                        usort($ProRequirements, function($a, $b) {
+                            return $b->getCreationDate() <=> $a->getCreationDate();
+                        });
+                        
+                        // Load ProEnquiries
+
+                        $ProEnquiryList = new \Pimcore\Model\DataObject\ProEnquiry\Listing();
+                        $ProEnquiryList->addConditionParam("ProfessionalPath = ?", $ProProfile);
+
+                        $ProEnquiryList->setOrderKey('creationDate');
+                        $ProEnquiryList->setOrder('desc');
+
+                        $ProEnquiries = $ProEnquiryList->load();
+
+                    }
+
+                    
+                    return $this->render('Professional/Dashboard/dashboard.html.twig', [
+                        'ProProfile' => $ProProfile,
+                        'ProProjects' => $ProProjects,
+                        'ProProducts' => $ProProducts,
+                        'customer' => $customer,
+                        'form' => $form->createView(), 
+                        'form1' => $form1->createView(),
+                        'Requirements' => $ProRequirements,
+                        'ProEnquiries' => $ProEnquiries,                      
+                    ]);
+                }
+                else{
+                    return $this->render('account/dashboard.html.twig', [
+                        'customer' => $customer,
+                    ]);
+                }
+            }
+        }
+    
+        // If the user is not an architect or the architect is not activated
+        return $this->render('Architect/NotLogged_signup.html.twig');
+    }
+
+    
+    /**
+     * @Route("/generate-quote", name="generate_quote", methods={"POST"})
+     */
+    public function generateQuote(Request $request, LoggerInterface $logger): Response
+    {
+        $key = $request->request->get('id');
+        $logger->info('Received request for generate quote', ['id' => $key]);
+
+        // Fetch ProRequirement based on the key
+        $ProRequirementsLists = new \Pimcore\Model\DataObject\ProRequirement\Listing();
+        $ProRequirementsLists->addConditionParam("ObjeKey = ?", $key); 
+        $ProRequirements = $ProRequirementsLists->load();
+
+        $selectedRequirement = $ProRequirements[0];
+
+        if (!$selectedRequirement) {
+            $logger->error('Requirement not found', ['id' => $key]);
+            return new Response('Requirement not found', Response::HTTP_NOT_FOUND);
+        }
+
+        $products = $selectedRequirement->getProRequirementProduct();
+
+        // Set up DOMPDF
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $dompdf = new Dompdf($options);
+
+        // Prepare HTML content with watermark
+        
+        $html = '
+            <html>
+            <head>
+            <style>
+                @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+                body {
+                    font-family: "Poppins", sans-serif;
+                    margin: 0;
+                    padding: 0;
+                    width: 100%;
+                }
+                .header-section, .addresssection {
+                    width: 100%;
+                    margin-bottom: 20px;
+                }
+                .header-section table, .addresssection table, .tablesection table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                .header-section table td, .addresssection table td, .tablesection table th, .tablesection table td {
+                    padding: 8px;
+                    
+                }
+                .header-section table td img {
+                    width: 200px;
+                }
+                .billedby, .billedto {
+                    width: 45%;
+                    padding: 0px 10px;
+                    
+                }
+                .tablesection {
+                    border-radius: 13px;
+                    overflow: hidden;
+                }
+                .tablesection thead {
+                    background-color: #5CDD9C;
+                }
+                .tablesection tbody {
+                    background-color: #A6DFC7;
+                    text-align: center;
+                }
+                .totalsection {
+                    text-align: right;
+                    padding: 20px;
+                }
+                .main h1 {
+                    margin: 10px 0px;
+                }
+                .main h2 {
+                    margin: 10px 0px;
+                }
+            </style>
+            </head>
+            <body>
+                <div class="main">
+                    <div class="header-section">
+                        <table>
+                            <tr>
+                                <td>
+                                    <h1>Instant Quote</h1>
+                                    <div>Quote No #: A00001</div>
+                                    <div>Quote Date #: Jul 25, 2024</div>
+                                    <div>Valid Till: Aug 09, 2024</div>
+                                </td>
+                                <td>
+                                    <img src="https://arqonz.in/static/images/Arqonz-new-logo.png" alt="Arqonz Logo">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="addresssection">
+                        <table>
+                            <tr>
+                                <td class="billedby">
+                                    <h2>Billed By</h2>
+                                    <div><b>ARQONZ GLOBAL PRIVATE LIMITED</b></div>
+                                    <div class="companyinfo" style="font-size:12px;">
+                                        <div>IIT Research Park, Taramani, Chennai, Tamil Nadu, India - 600113</div>
+                                        <div><b>GSTIN:</b> 33AATCA8023B1ZX</div>
+                                        <div><b>PAN:</b> AAACC1206D</div>
+                                        <div><b>Phone:</b> +91 9150002745</div>
+                                    </div>
+                                </td>
+                                <td class="billedto">
+                                    <h2>Billed To</h2>
+                                    <div><b>ABC Builders Ltd.</b></div>
+                                        <div class="companyinfo" style="font-size:12px;">
+                                        <div>No 218, Fountain Plaza, Pantheon Road, Chennai, Tamil Nadu, India - 600008</div>
+                                        <div><b>GSTIN:</b> 24AACC1206D1ZM</div>
+                                        <div><b>PAN:</b> AAACC1206D</div>
+                                        <div><b>Phone:</b> +91 9150002745</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="tablesection">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Product Name</th>
+                                    <th>Brand</th>
+                                    <th>Product Material</th>
+                                    <th>Unit Price</th>
+                                    <th>Unit</th>
+                                    <th>Quantity</th>
+                                    <th>Sub-Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>';
+
+        $dsn = 'mysql:host=localhost;dbname=pimcore;charset=utf8mb4';
+        $username = 'pimcoreuser';
+        $password = 'G0H0me@T0day';
+        $pdo = new \PDO($dsn, $username, $password);
+        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+        $totalSum = 0;
+        $serialNumber = 1;
+
+        foreach ($products as $product) {
+            $productName = $product->getProductName();
+            $brand = $product->getBrand();
+            $material = $product->getMaterial();
+            $quantity = $product->getQuantity();
+
+            $logger->info('Processing product', [
+                'productName' => $productName,
+                'brand' => $brand,
+                'material' => $material,
+                'quantity' => $quantity
+            ]);
+
+            $sql = "SELECT pr.ID FROM products pr
+                    WHERE pr.Product_Type = :productName
+                    AND pr.Product_Brand = :brand
+                    AND pr.Product_Material = :material";
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':productName', $productName);
+            $stmt->bindValue(':brand', $brand);
+            $stmt->bindValue(':material', $material);
+            $stmt->execute();
+            $productIds = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+
+            $logger->info('Product IDs found', ['productIds' => $productIds]);
+
+            $minPrice = PHP_INT_MAX;
+            $minPriceUnit = 'N/A';
+
+            foreach ($productIds as $productId) {
+                $priceSql = "SELECT Product_Price, Product_Unit FROM product_costs WHERE ID = :productId";
+                $priceStmt = $pdo->prepare($priceSql);
+                $priceStmt->bindValue(':productId', $productId);
+                $priceStmt->execute();
+                $priceData = $priceStmt->fetch(\PDO::FETCH_ASSOC);
+
+                $logger->info('Price data', ['productId' => $productId, 'priceData' => $priceData]);
+
+                if ($priceData && $priceData['Product_Price'] < $minPrice) {
+                    $minPrice = $priceData['Product_Price'];
+                    $minPriceUnit = $priceData['Product_Unit'];
+                }
+            }
+
+            $unitPrice = ($minPrice === PHP_INT_MAX) ? 'N/A' : $minPrice;
+            $unit = $minPriceUnit;
+
+            $logger->info('Final unit price and unit for product', [
+                'unitPrice' => $unitPrice,
+                'unit' => $unit
+            ]);
+
+            // Calculate the total price
+            $totalPrice = ($unitPrice !== 'N/A') ? $unitPrice * $quantity : 'N/A';
+            
+            // Accumulate total sum
+            if ($totalPrice !== 'N/A') {
+                $totalSum += $totalPrice;
+            }
+
+            // Add product row to the table
+            $html .= '<tr>
+                        <td>' . $serialNumber . '</td>
+                        <td>' . $productName . '</td>
+                        <td>' . $brand . '</td>
+                        <td>' . $material . '</td>
+                        <td>' . $unitPrice . '</td>
+                        <td>' . $unit . '</td>
+                        <td>' . $quantity . '</td>
+                        <td>' . $totalPrice . '</td>
+                    </tr>';
+            $serialNumber++;
+        }
+
+        // Add total row
+        $html .= '
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="totalsection">
+                        <div>Total (INR): ₹ ' . $totalSum . '</div>
+                    </div>
+                    <div class="disclaimer">
+                        <em>Disclaimer: This is an AI-generated quote. Please verify the details for accuracy before proceeding with any transactions. Prices and availability are subject to change.</em>
+                    </div>
+                </div>
+            </body>
+            </html>';
+
+        // $html .= '</tbody></table>';
+
+        $html .= '</body></html>';
+
+        // Load HTML content into DOMPDF
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $pdfOutput = $dompdf->output();
+
+        // Prepare and send PDF as response
+        $response = new Response($pdfOutput);
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'attachment; filename="InstantQuote.pdf"');
+
+        $logger->info('PDF generated successfully');
+        
+        return $response;
+    }
+
+
+    /**
+     * Index page for account - it is restricted to ROLE_USER via security annotation
+     *
+     * @Route("/account/indexNew", name="account-indexNew")
+     * @param Request $request
+     * @param UserInterface|null $user
+     *
+     * @return Response
+     */
+    public function architectDashboardActionNew(Request $request, Security $security, Translator $translator)
+    {
+        $user = $security->getUser();
+    
+        if ($user && $this->isGranted('ROLE_USER')) {
+            $customer = $user;
+            $customertype = $customer->getcustomertype();
+            $architectProfile = null;
+            $architectActivate = null;
+
+            $form1 = $this->createForm(SearchFormType::class);
+            $form1->handleRequest($request);
+            if ($form1->isSubmitted() && $form->isValid()) {
+                $formData1 = $form1->getData();
+                $searchKeyword = $form1->get('Search')->getData();
+                return $this->redirect("Search/$searchKeyword");
+            }
+    
+            
+            if ($customertype === 'Customer'){
+
+                return $this->render('account/customer_dashboard.html.twig', [
+                    'customer' => $customer,
+                ]);
+            }
+            elseif ($customertype === 'Contractor' || $customertype === 'Engineer' || $customertype === 'Designer' || $customertype === 'Architect' || $customertype === 'Builder' || $customertype === 'Manufacturer' || $customertype === 'Distributor' || $customertype === 'Retailer'){
+                
+                $PortfolioActivate = $customer->getPortfolioActivate();
+                if($PortfolioActivate === 'true'){
+                    $ProProfiles = $customer->getPortfolio();
+                    $ProProfile = $ProProfiles[0];
+                    
+
+                    if($ProProfile){
+                    
+                        $NotificationList = new \Pimcore\Model\DataObject\ProNotification\Listing();
+                        $NotificationList->addConditionParam("professional = ?", $ProProfile);
+            
+                        $NotificationList->setOrderKey('creationDate');
+                        $NotificationList->setOrder('desc');
+        
+                        $ProProjectsList = new \Pimcore\Model\DataObject\ProProject\Listing();
+                        $ProProjectsList->addConditionParam("ProfessionalPath = ?", $ProProfile);
+
+                        $ProProjectsList->setOrderKey('creationDate');
+                        $ProProjectsList->setOrder('desc');
+
+                        $ProProjects = $ProProjectsList->load();
+
+                        $ProProducts = new \Pimcore\Model\DataObject\ProProduct\Listing();
+                        $ProProducts->addConditionParam("ProfessionalPath = ?", $ProProfile);
+
+                        $ProProducts->setOrderKey('creationDate');
+                        $ProProducts->setOrder('desc');
+
+                        $ProProducts = $ProProducts->load();
+
+                        $form = $this->createForm(ProRequirementFormType::class);
+                        $form->handleRequest($request);
+
+                        if ($form->isSubmitted() && $form->isValid()) {
+                            // Handle file upload and save the ProRequirement object
+
+                            $uploadedFile = $form->get('excelFile')->getData();
+                            $proRequirement = new ProRequirement();
+
+                
+                            try {
+                                $asset = new Document();
+                                $asset->setData(file_get_contents($uploadedFile->getPathname()));
+                                $timestamp = time();
+                                $originalFilename = $uploadedFile->getClientOriginalName();
+                                $newFilename = $timestamp . '_' . $originalFilename;
+                                $asset->setFilename($newFilename); // Set the desired filename
+
+                                // Save the asset in the "/Services/Requirements" directory
+                                if ($customertype === 'Contractor'){
+                                    $asset->setParent(\Pimcore\Model\Asset::getByPath("/Services/Contractors/Requirements"));
+                                    }
+                                elseif ($customertype === 'Designer'){
+                                    $asset->setParent(\Pimcore\Model\Asset::getByPath("/Services/Designers/Requirements"));
+                                    }
+                                elseif ($customertype === 'Architect'){
+                                    $asset->setParent(\Pimcore\Model\Asset::getByPath("/Services/Architects/Requirements"));
+                                    }
+                                elseif ($customertype === 'Builder'){
+                                    $asset->setParent(\Pimcore\Model\Asset::getByPath("/Services/Builders/Requirements"));
+                                    }
+                                
+                                $asset->save();
+                                $proRequirement->setExcelFile($asset);
+                                $objkey = time();
+                                $proRequirement->setKey(time());
+                                $proRequirement->setParent(Service::createFolderByPath('/Requirements'));
+                                $proRequirement->setTitle($form->get('Title')->getData());
+                                
+                                $proRequirement->setDescription($form->get('Description')->getData());
+                                $proRequirement->setProfessional($ProProfile);
+                                $proRequirement->setProfessionalPath($ProProfile);
+                                $excelData = $this->processExcelData($uploadedFile);
+                                $proRequirement->setExcelData($excelData);
+                                $proRequirement->setObjeKey($proRequirement->getKey());
+                                $proRequirement->setPublished(true);
+                
+                                $proRequirement->save();
+            
+                                // Redirect or do other actions
+                                $this->addFlash('success', $translator->trans('Requirements submitted succesfully.'));
+                            } catch (FileException $e) {
+                                // Handle file upload error
+                                // Log the error or show a flash message to the user
+                            }
+                        }
+
+                        $ProRequirementsList = new \Pimcore\Model\DataObject\ProRequirement\Listing();
+                        $ProRequirementsList->addConditionParam("ProfessionalPath = ?", $ProProfile);
+
+                        $ProRequirementsList->setOrderKey('creationDate');
+                        $ProRequirementsList->setOrder('desc');
+
+                        $ProRequirements = $ProRequirementsList->load();
                         
                         // Load ProEnquiries
 
@@ -757,6 +1070,9 @@ class ContentController extends BaseController
 
             //Fetch pro RequirementProducts
             $ProRequirementProducts = $ProRequirement->getProRequirementProduct();
+            usort($ProRequirementProducts, function($a, $b) {
+                return $b->getCreationDate() <=> $a->getCreationDate();
+            });
 
             $ProProfile = $ProRequirement->getProfessional();
 
@@ -784,6 +1100,302 @@ class ContentController extends BaseController
         // If the user is not an architect or the architect is not activated
         return $this->render('Architect/NotLogged_signup.html.twig');
     }
+
+    
+    /**
+     * @Route("/supplier-pinned-notification", name="add-supplier-pinned-notification", methods={"POST"})
+     */
+    public function addSupplierPinnedNotification(Request $request, Security $security, LoggerInterface $logger): Response
+    {
+        $user = $security->getUser();
+
+        if ($user && $this->isGranted('ROLE_USER')) {
+            $ProductName = $request->request->get('productName');
+            $brandName = $request->request->get('brandName');
+            $specification = $request->request->get('specification');
+            $productUnit = $request->request->get('productUnit');
+            $productQuantity = $request->request->get('quantity');
+            $location = $request->request->get('location');
+            $expiryDate = $request->request->get('expiryDate');
+            $ProRequirementProductPath = $request->request->get('ProRequirementProductPath');
+            $ProductMaterial = $request->request->get('Material');
+
+            $logger->info('Request data received', [
+                'productName' => $ProductName,
+                'brandName' => $brandName,
+                'specification' => $specification,
+                'productUnit' => $productUnit,
+                'productQuantity' => $productQuantity,
+                'location' => $location,
+                'expiryDate' => $expiryDate,
+                'ProRequirementProductPath' => $ProRequirementProductPath,
+                'ProductMaterial' => $ProductMaterial
+            ]);
+
+            $proRequirementProduct = ProRequirementProduct::getByPath($ProRequirementProductPath);
+            $proRequirementProduct->setQuoteStatus('Started');
+            if ($expiryDate) {
+                try {
+                    $expiryDateTime = new \DateTime($expiryDate, new \DateTimeZone('Asia/Kolkata'));
+                    $expiryCarbonDate = Carbon::instance($expiryDateTime);
+                    $proRequirementProduct->setEndDate($expiryCarbonDate);
+                } catch (\Exception $e) {
+                    error_log("Error converting expiry date: " . $e->getMessage());
+                    // Handle the error, maybe log it or return an error response
+                    // Example: return new JsonResponse(['error' => 'Invalid date format'], 400);
+                }
+            }
+            $proRequirementProduct->save();
+
+            // Retrieve all ProProfiles with PortfolioType "Manufacturer"
+            $list = new \Pimcore\Model\DataObject\ProProfile\Listing();
+            $list->setCondition('PortfolioType = ?', ['Manufacturer']);
+            $proProfiles = $list->load();
+
+            $logger->info('Loaded ProProfiles', ['count' => count($proProfiles)]);
+
+            // Loop through each ProProfile
+            foreach ($proProfiles as $proProfile) {
+                $logger->info('Processing ProProfile', ['proProfileId' => $proProfile->getId()]);
+                // Retrieve all ProProduct objects linked to the current ProProfile
+                $proProducts = $proProfile->getProducts();
+
+                $logger->info('Loaded ProProducts for ProProfile', [
+                    'proProfileId' => $proProfile->getId(),
+                    'proProductCount' => count($proProducts)
+                ]);
+
+                foreach ($proProducts as $proProduct) {
+                    // Split the tags into an array
+                    $tags = explode(',', $proProduct->getTags());
+                    $tags = array_map('trim', $tags);
+                    $tags = array_map('strtolower', $tags);
+                    $tags = array_unique($tags);
+
+                    $logger->info('Processing ProProduct', [
+                        'proProductId' => $proProduct->getId(),
+                        'tags' => $tags
+                    ]);
+
+                    // Convert ProductName to lowercase for comparison
+                    $lowercaseProductName = strtolower(trim($ProductName));
+
+                    // Check if any tag matches the ProductName
+                    // if (in_array(trim($ProductName), array_map('trim', $tags))) {
+                    foreach ($tags as $tag) {
+                        if ($lowercaseProductName === $tag) {
+
+                            $logger->info('Match found', ['proProductId' => $proProduct->getId(), 'tag' => $tag]);
+                            
+                            // Create a new SupplierPinnedNotification for each matching tag
+                            $supplierPinnedNotification = new SupplierPinnedNotification();
+                            $supplierPinnedNotification->setBrand($brandName);
+                            $supplierPinnedNotification->setProductName($ProductName);
+                            $supplierPinnedNotification->setSpecification($specification);
+                            $supplierPinnedNotification->setProductUnit($productUnit);
+                            $supplierPinnedNotification->setProductQuantity($productQuantity);
+                            $supplierPinnedNotification->setLocation($location);
+                            $supplierPinnedNotification->setProRequirementProduct($proRequirementProduct);
+                            $supplierPinnedNotification->setMaterial($ProductMaterial);
+                            $supplierPinnedNotification->setSupplier($proProfile); // Set the Supplier field to the current ProProfile
+
+                            if ($expiryDate) {
+                                try {
+                                    $expiryDateTime = new \DateTime($expiryDate, new \DateTimeZone('Asia/Kolkata'));
+                                    $expiryCarbonDate = Carbon::instance($expiryDateTime);
+                                    $supplierPinnedNotification->setEndDate($expiryCarbonDate);
+                                } catch (\Exception $e) {
+                                    error_log("Error converting expiry date: " . $e->getMessage());
+                                    // Handle the error, maybe log it or return an error response
+                                    // Example: return new JsonResponse(['error' => 'Invalid date format'], 400);
+                                }
+                            }
+                            
+
+                            // if ($expiryDate) {
+                            //     $expiryDate = Carbon::instance($expiryDate)->setTimezone('Asia/Kolkata');
+                            //     $supplierPinnedNotification->setEndDate($expiryDate);
+                            // }
+
+                            $supplierPinnedNotification->setParent(Service::createFolderByPath('/PinnedNotifications'));
+                            $supplierPinnedNotification->setKey(uniqid());
+                            $supplierPinnedNotification->setPublished(true);
+                            $supplierPinnedNotification->save();
+
+                            $logger->info('Created and saved SupplierPinnedNotification', ['supplierPinnedNotificationId' => $supplierPinnedNotification->getId()]);
+                        }
+                    }
+                }
+            }
+
+            return new JsonResponse(['success' => true]);
+        }
+
+        return new JsonResponse(['success' => false, 'message' => 'Unauthorized'], JsonResponse::HTTP_UNAUTHORIZED);
+    }
+
+    // /**
+    //  * @Route("/api/Bid-Accepted", name="add-supplier-Bid-Accepted", methods={"POST"})
+    //  */
+    // public function createSupplierBid(Request $request, Security $security): Response
+    // {
+    //     $user = $security->getUser();
+    // }
+
+
+    /**
+     * @Route("/api/supplier-bid", name="add-supplier-Bid", methods={"POST"})
+     */
+    public function createSupplierBid(Request $request, Security $security): Response
+    {
+        $user = $security->getUser();
+
+        if ($user && $this->isGranted('ROLE_USER')) {
+            $productName = $request->request->get('productName');
+            $productBrand = $request->request->get('productBrand');
+            $productQuantity = $request->request->get('productQuantity');
+            $productUnit = $request->request->get('productUnit');
+            $productMaterial = $request->request->get('productMeterial');
+            $bidAmount = $request->request->get('bidAmount');
+            $supplierPinnedNotificationPath = $request->request->get('SupplierPinnedNotificationPath');
+            $expiryDate = $request->request->get('deliveryTime');
+
+            $supplierPinnedNotification = SupplierPinnedNotification::getByPath($supplierPinnedNotificationPath);
+
+            
+
+            $customer = $user;
+            $customertype = $customer->getcustomertype();
+            $customerActivate = $customer->getPortfolioActivate();
+            if($customerActivate === 'true'){
+                $ProProfiles = $customer->getPortfolio();
+                $ProProfile = $ProProfiles[0];
+            }
+
+            if (!empty($ProProfiles)) {
+
+                $ProProfile = $ProProfiles[0];
+                    
+                // Create a new SupplierPinnedNotification for each matching tag
+                $supplierBid = new SupplierBid();
+                $supplierBid->setProductName($productName);
+                $supplierBid->setProductBrand($productBrand);
+                $supplierBid->setProductQuantity($productQuantity);
+                $supplierBid->setProductUnit($productUnit);
+                $supplierBid->setMaterial($productMaterial);
+                $supplierBid->setBidAmount($bidAmount);
+                $supplierBid->setSupplierPinnedNotification($supplierPinnedNotification);
+                $supplierBid->setProRequirementProduct($supplierPinnedNotification->getProRequirementProduct());
+                $supplierBid->setSupplier($ProProfile); // Set the Supplier field to the current ProProfile
+            
+
+                // if ($expiryDate) {
+                //     $expireDate = Carbon::instance($expireDate)->setTimezone('Asia/Kolkata');
+                //     $supplierBid->setEndDate($expiryDate);
+                // }
+
+                if ($expiryDate) {
+                    try {
+                        $expiryDateTime = new \DateTime($expiryDate, new \DateTimeZone('Asia/Kolkata'));
+                        $expiryCarbonDate = Carbon::instance($expiryDateTime);
+                        $supplierBid->setEndDate($expiryCarbonDate);
+                    } catch (\Exception $e) {
+                        error_log("Error converting expiry date: " . $e->getMessage());
+                        // Handle the error, maybe log it or return an error response
+                        // Example: return new JsonResponse(['error' => 'Invalid date format'], 400);
+                    }
+                }
+
+                $supplierBid->setParent(Service::createFolderByPath('/SupplierBid'));
+                $supplierBid->setKey(uniqid());
+                $supplierBid->setPublished(true);
+                $supplierBid->save();
+
+                $supplierPinnedNotification->setStatus('Accepted');
+                $supplierPinnedNotification->setCurrentBid($supplierBid);
+                $supplierPinnedNotification->save();
+
+            }
+
+            return new JsonResponse(['success' => true]);
+        }
+
+        return new JsonResponse(['success' => false, 'message' => 'Unauthorized'], JsonResponse::HTTP_UNAUTHORIZED);
+    }
+
+    /**
+     * @Route("/api/edit-supplier-bid", name="edit-supplier-bid", methods={"POST"})
+     */
+    public function editSupplierBid(Request $request, Security $security): Response
+    {
+        $user = $security->getUser();
+
+        if ($user && $this->isGranted('ROLE_USER')) {
+            $productName = $request->request->get('Edit-productNameField');
+            $productBrand = $request->request->get('Edit-productBrandField');
+            $productQuantity = $request->request->get('Edit-productQuantityField');
+            $productUnit = $request->request->get('Edit-productUnitField');
+            $productMaterial = $request->request->get('Edit-productMeterial');
+            $bidAmount = $request->request->get('Edit-bidAmount');
+            $expiryDate = $request->request->get('EditdeliveryTime');
+            $DeliveryLocation = $request->request->get('Edit-productLocation');
+            $supplierPinnedNotificationPath = $request->request->get('Edit-SupplierPinnedNotificationPath');
+
+            $supplierPinnedNotification = SupplierPinnedNotification::getByPath($supplierPinnedNotificationPath);
+            $supplierBid = $supplierPinnedNotification->getCurrentBid();
+
+            if ($supplierBid) {
+                $supplierBid->setProductName($productName);
+                $supplierBid->setProductBrand($productBrand);
+                $supplierBid->setProductQuantity($productQuantity);
+                $supplierBid->setProductUnit($productUnit);
+                $supplierBid->setMaterial($productMaterial);
+                $supplierBid->setBidAmount($bidAmount);
+
+                if ($expiryDate) {
+                    try {
+                        $expiryDateTime = new \DateTime($expiryDate, new \DateTimeZone('Asia/Kolkata'));
+                        $expiryCarbonDate = Carbon::instance($expiryDateTime);
+                        $supplierBid->setEndDate($expiryCarbonDate);
+                    } catch (\Exception $e) {
+                        error_log("Error converting expiry date: " . $e->getMessage());
+                        return new JsonResponse(['success' => false, 'message' => 'Invalid date format'], 400);
+                    }
+                }
+
+                $supplierBid->save();
+
+                $supplierPinnedNotification->setCurrentBid($supplierBid);
+                $supplierPinnedNotification->save();
+
+                return new JsonResponse(['success' => true]);
+            }
+
+            return new JsonResponse(['success' => false, 'message' => 'Bid not found'], 404);
+        }
+
+        return new JsonResponse(['success' => false, 'message' => 'Unauthorized'], JsonResponse::HTTP_UNAUTHORIZED);
+    }
+
+
+    /**
+     * @Route("/supplier-pinned-notification/delete/{key}", name="delete-supplier-pinned-notification", methods={"DELETE"})
+     */
+    public function deleteSupplierPinnedNotification(string $key): Response
+    {
+        $path = "/PinnedNotifications/{$key}";
+        $supplierPinnedNotification = SupplierPinnedNotification::getByPath($path);
+
+        if ($supplierPinnedNotification) {
+            $supplierPinnedNotification->delete();
+            return new JsonResponse(['success' => true]);
+        }
+
+        return new JsonResponse(['success' => false, 'message' => 'Notification not found'], JsonResponse::HTTP_NOT_FOUND);
+    }
+
+
+
 
     /**
      * @Route("BOQ/3D-product-demo", name="3d-Product-demo")
@@ -814,7 +1426,7 @@ class ContentController extends BaseController
             $optionType = $request->request->get('option_type');
 
             if ($optionType === 'brands') {
-                $sql = "SELECT DISTINCT Product_Brand FROM products WHERE Product_Name = :productType";
+                $sql = "SELECT DISTINCT Product_Brand FROM products WHERE Product_Type = :productType";
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindValue(':productType', $productType);
                 $stmt->execute();
@@ -827,7 +1439,7 @@ class ContentController extends BaseController
                 $options = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             } elseif ($optionType === 'size') {
                 $brand = $request->request->get('brand');
-                $sql = "SELECT DISTINCT Specification_1 FROM products WHERE Product_Name = :productType AND Product_Brand = :brand";
+                $sql = "SELECT DISTINCT Specification_1 FROM products WHERE Product_Type = :productType AND Product_Brand = :brand";
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindValue(':productType', $productType);
                 $stmt->bindValue(':brand', $brand);
@@ -836,7 +1448,7 @@ class ContentController extends BaseController
             } elseif ($optionType === 'specification_values') {
                 $specificationNumber = $request->request->get('specification_number');
                 $column = "Specification_" . $specificationNumber;
-                $sql = "SELECT DISTINCT $column FROM products WHERE Product_ID = (SELECT Product_ID FROM products WHERE Product_Name = :productType LIMIT 1)";
+                $sql = "SELECT DISTINCT $column FROM products WHERE Product_ID = (SELECT Product_ID FROM products WHERE Product_Type = :productType LIMIT 1)";
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindValue(':productType', $productType);
                 $stmt->execute();
@@ -1225,9 +1837,6 @@ class ContentController extends BaseController
             $ProProposalBid->save();
 
             
-
-
-            
         }
 
         return $this->render('Architect/NotLogged_signup.html.twig');
@@ -1468,6 +2077,52 @@ class ContentController extends BaseController
         // If the user is not an architect or the architect is not activated
         return $this->render('Architect/NotLogged_signup.html.twig');
     }
+
+    /**
+     * 
+     *
+     * @Route("/account/Products", name="account-Products-list")
+     * @param Request $request
+     * @param UserInterface|null $user
+     *
+     * @return Response
+     */
+    public function DashboardProductsAction(Request $request, Security $security, Translator $translator)
+    {
+        $user = $security->getUser();
+
+        if ($user && $this->isGranted('ROLE_USER')) {
+            $customer = $user;
+            $customertype = $customer->getcustomertype();
+            $ProProfiles = $customer->getPortfolio();
+            $ProProfile = $ProProfiles[0];
+            $NotificationList = new \Pimcore\Model\DataObject\ProNotification\Listing();
+            $NotificationList->addConditionParam("professional = ?", $ProProfile);
+            $NotificationList->setOrderKey('creationDate');
+            $NotificationList->setOrder('desc');
+
+            $ProProductsList = new \Pimcore\Model\DataObject\ProProduct\Listing();
+            $ProProductsList->addConditionParam("ProfessionalPath = ?", $ProProfile);
+
+            $ProProductsList->setOrderKey('creationDate');
+            $ProProductsList->setOrder('desc');
+
+            $ProProducts = $ProProductsList->load();
+
+
+            return $this->render('Professional/dashboard_products_list.html.twig', [
+                    'ProProfile' => $ProProfile,
+                    'customer' => $customer,
+                    'ProProducts' => $ProProducts,
+                
+                ]);
+            
+            }
+        // If the user is not an architect or the architect is not activated
+        return $this->render('Architect/NotLogged_signup.html.twig');
+    }
+
+
 
     /**
      * 
@@ -1821,7 +2476,7 @@ class ContentController extends BaseController
      *
      * @return Response
      */
-    public function DashboardAddRequirementsAction(Request $request, Security $security, Translator $translator)
+    public function DashboardAddRequirementsAction(Request $request, Security $security, Translator $translator, LoggerInterface $logger)
     {
         $user = $security->getUser();
 
@@ -1864,7 +2519,8 @@ class ContentController extends BaseController
 
                     $asset->save();
                     $proRequirement->setExcelFile($asset);
-                    $proRequirement->setKey($timestamp); // Use timestamp as the key
+                    $objKey = $timestamp;
+                    $proRequirement->setKey($objKey); // Use timestamp as the key
                     $proRequirement->setParent(Service::createFolderByPath('/Requirements'));
                     $proRequirement->setTitle($form->get('Title')->getData());
                     $proRequirement->setDescription($form->get('Description')->getData());
@@ -1881,11 +2537,12 @@ class ContentController extends BaseController
                     // Handle ExpireDate
                     $expireDate = $form->get('ExpireDate')->getData();
                     if ($expireDate) {
-                        $expireDate = Carbon::instance($expireDate);
+                        $expireDate = Carbon::instance($expireDate)->setTimezone('Asia/Kolkata');
                         $proRequirement->setExpireDate($expireDate);
                     }
 
                     $proRequirement->setPublished(true);
+                    $proRequirement->setObjeKey($objKey);
 
                     $proRequirement->save();
 
@@ -1917,9 +2574,20 @@ class ContentController extends BaseController
                             // Create ProRequirementProduct object
                             $proRequirementProduct = new ProRequirementProduct();
                             $proRequirementProduct->setProductName($rowData[1]);
-                            $proRequirementProduct->setQuantity($rowData[2]);
-                            $proRequirementProduct->setUnit($rowData[3]);
+                            $proRequirementProduct->setBrand($rowData[2]);
+                            $proRequirementProduct->setMaterial($rowData[3]);
+                            $proRequirementProduct->setMinDec($rowData[11]);
+                            $proRequirementProduct->setQuantity($rowData[6]);
+                            $proRequirementProduct->setUnit($rowData[7]);
+                            $proRequirementProduct->setMinimumReserve($rowData[12]);
+                            $proRequirementProduct->setDescription($rowData[5]);
                             $proRequirementProduct->setProRequirement($proRequirement); // Set the relation to ProRequirement
+                            // Handle ExpireDate
+                            $expireDate = $form->get('ExpireDate')->getData();
+                            if ($expireDate) {
+                                $expireDate = Carbon::instance($expireDate)->setTimezone('Asia/Kolkata');
+                                $proRequirementProduct->setEndDate($expireDate);
+                            }
 
                             // Save the ProRequirementProduct object in the folder named as the key of the proRequirement
                             $proRequirementProduct->setParent(Service::createFolderByPath($productFolderPath));
@@ -1934,7 +2602,7 @@ class ContentController extends BaseController
                 } catch (\Exception $e) {
                     // Handle file upload error
                     $this->addFlash('error', $translator->trans('An error occurred while submitting the requirements: ') . $e->getMessage());
-                    $this->logger->error('Error while uploading requirements: ' . $e->getMessage());
+                    $logger->error('Error while uploading requirements: ' . $e->getMessage());
                 }
             }
 
@@ -4619,6 +5287,11 @@ class ContentController extends BaseController
                     $ProProduct->setProductName($form->get('ProductName')->getData());
                     $ProProduct->setProductDescription($form->get('ProductDescription')->getData());
                     $ProProduct->setSpecifications($form->get('Specifications')->getData());
+                    $ProProduct->setProductBrand($form->get('ProductBrand')->getData());
+                    $ProProduct->setMaterial($form->get('ProductMaterial')->getData());
+                    $ProProduct->setPrice($form->get('ProductPrice')->getData());
+                    $ProProduct->setUnit($form->get('ProductUnit')->getData());
+                    $ProProduct->setTags($form->get('ProductTags')->getData());
 
                     $ProProduct->setParentCategory($form->get('ParentCategory')->getData());
                     $ProProduct->setSubCategory($form->get('SubCategory')->getData());

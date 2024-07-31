@@ -1,62 +1,73 @@
-{% extends 'layouts/arqonz_layout.html.twig' %}
-{% do pimcore_head_link().appendStylesheet('/static/css/arqonz_Prodashboard.css') %}
-
+{% extends 'layouts/UserDashboard_layout.html.twig' %}
 
 {% block content %}
-    {% include 'Professional/dashboard_navigation.html.twig' %}
+    <div class="dashboard-projects">
+        <span>
+            <span class="Breadcrumb-nonactive"><a href="/en/account/index">Dashboard</a></span><span class="breadcrumb-divider">></span><span class="Breadcrumb-active">Projects</span>
+        </span>
+    </div>
+    <div class="line-8"></div>
+
 
     <div class="dashboard-container">
         <div class="left-column" style="width: 100%; justify-content:center;">
             <!-- ArchitectProjects -->
             <div class="projectssection">
-                <div class="sectionheading">
-                <h2>{{ customer.getcustomertype() }} Projects</h2> 
-                </div>
-                <div class="Add-project-button">
-                    {% if app.user.customertype == 'Contractor' %}
-                        <a href="/contractor/portfolio/add-project" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-plus" aria-hidden="true" style="font-size:15px;"></i> Add Project</a>
-                    {% endif %}
-                    {% if app.user.customertype == 'Designer' %}
-                        <a href="/designer/portfolio/add-project" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-plus" aria-hidden="true" style="font-size:15px;"></i> Add Project</a>
-                    {% endif %}
-                    {% if app.user.customertype == 'Architect' %}
-                        <a href="/architect/portfolio/add-project" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-plus" aria-hidden="true" style="font-size:15px;"></i> Add Project</a>
-                    {% endif %}
-                    {% if app.user.customertype == 'Builder' %}
-                        <a href="/builder/portfolio/add-project" class="btn btn-lg btn-block btn-success btn" target="_blank"><i class="fa fa-plus" aria-hidden="true" style="font-size:15px;"></i> Add Project</a>
-                    {% endif %}
-                    
-                </div>
-                    <!-- ArchitectProjects -->
-                <div class="details">
-                    <div class="pro-projects">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Project Title</th>
-                                    <th>Edit</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for ProProject in ProProjects %}
-                                    {% if ProProject.Professional == ProProfile %}
-                                        <tr>
-                                            <td><input type="checkbox"></td>
-                                            <td>
-                                                <strong>{{ ProProject.getProjectName() }}</strong>
-                                            </td>
-                                            <td><a href="/account/Project/edit/{{ ProProject.getKey() }}">EDIT</a></td>
-                                        </tr>
-                                    {% endif %}
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                <div class="dashboardheading-section">
+                    <div class="sectionheading">
+                        <h2>Projects</h2> 
+                    </div>
+                    <div class="DashboardStatsSection">
+                        <div class="totalnumber">
+                            <p>05</p>
+                        </div>
+                        <div class="totalnumberLable">
+                            <p>Projects</br>Found</p>
+                        </div>
                     </div>
                 </div>
+
+                <div class="DashProjectsListSection">
+                    {% for ProProject in ProProjects %}
+                    <a href="/{{ app.user.customertype|lower }}/project/{{ ProProject.getKey() }}">
+                        <div class="Projectssinglecontainer">
+                            <div class="DashprojectfeaturedImg">
+                                {% if ProProject.ProjectGallery is not empty %}
+                                    {% set images = ProProject.ProjectGallery.getItems() %}
+                                    {% if images|length > 0 %}
+                                        <img src="{{ images[0].getThumbnail('ProjectFeaturedThumbnail') }}" alt="Project Thumbnail">
+                                    {% endif %}
+                                {% else %}
+                                    <img src="/static/images/no-image-found.png" width="262px" height="161px" alt="Project Thumbnail">
+                                {% endif %}
+                            </div>
+                            <div class="Dashprojecttitle">
+                                <h3>{{ ProProject.ProjectName() }}</h3>
+                            </div>
+                            <div class="DashprojectLocation">
+                                <div class="pleftcol">
+                                    <img src="/static/icons/locationIcon.svg" alt="Project Location">
+                                    <p>{{ ProProject.getLocation() }}</p>
+                                </div>
+                                <div class="prightcol">
+                                    <span><a href="/account/Project/edit/{{ ProProject.getKey() }}">Edit</a></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                    <div class="addprojectbutton">
+                        <a href="/{{ customer.getcustomertype()|lower }}/portfolio/add-project">
+                            <img src="/static/icons/addprojectsbtn.svg" alt="">
+                        </a>
+                    </div>
+
+                </div>
+
             
             </div> 
         </div>
-    
+    </div>
     
 {% endblock %}

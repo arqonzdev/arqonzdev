@@ -18,6 +18,9 @@ p, h2, h3, h1, h4, a{
     letter-spacing: 0.3px;
     
 }
+.sectionheading h2{
+    line-height: 77px;
+}
 .dashLogo img{
     max-width: 166px;
 }
@@ -44,7 +47,7 @@ a:hover{
     max-width: 307px;
     gap: 9px;
     padding-right: 16px;
-    padding-top: 30px;
+    padding-top: 30px;   
 }
 .dashboardCol1 > * {
     width: 100%;
@@ -53,6 +56,29 @@ a:hover{
     display: flex;
     justify-content: center;
     margin: 24px 25px;
+}
+.dashboardheading-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.DashboardStatsSection {
+    text-align: right;
+}
+.totalnumber {
+    font-size: 32px;
+    font-weight: 600;
+}
+.totalnumberLable {
+    color: rgba(34, 0, 34, 0.50);
+}
+.DashboardStatsSection .totalnumber {
+    line-height: 2.5rem;
+}
+.totalnumberLable p {
+    line-height: 1.3rem;
+    color: rgba(34, 0, 34, 0.50);
+    font-weight: 600;
 }
 
 /* DashboardLeftLCol */
@@ -63,8 +89,8 @@ a:hover{
     
 }
 .dashboardbutton a{
-    background-color: #A6DFC7;
-    color: #485B55;
+    background-color: #00A79D;
+    color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -91,7 +117,7 @@ a:hover{
 .lefthighlighter{
     width:5px;
     min-height:100%;
-    background-color: #A6DFC7;
+    background-color: #00A79D;
     border-radius: 0 41px 41px 0px;
 }
 .dashboardbuttonLink:hover{
@@ -273,6 +299,7 @@ a:hover{
     padding: 24px 19px;
     background-color: #fff;
     border-radius: 14px;
+    /* box-shadow: 6px 54px 0px rgba(0, 0, 0, 0.05); */
 }
 .dashboardProjectsAreaContainer h3, .dashboardRequirementsAreaContainer h3, .dashboardEnquiriesAreaContainer h3{
     margin-bottom: 28px;
@@ -288,7 +315,7 @@ a:hover{
     text-align: center;
     border-collapse: collapse;
     overflow: hidden; 
-    border-radius: 22px;
+    border-radius: 11px;
 }
 .DashboardRequirements > .requirements-table thead, .DashboardEnquiries > .Enquiries-table thead{
     background-color: #f1f4f9;
@@ -363,6 +390,7 @@ tbody tr{
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0px 15px;
 }
 /* .addprojectbutton a{
     padding: 20px 23px;
@@ -385,9 +413,13 @@ tbody tr{
     top: 100%;
     right: 0;
     display: none;
+    border: 1px solid rgba(0, 0, 0, 0.20);
 }
-.dropdown-content li {
+.dropdown-content li{
     padding: 10px 26px;
+}
+.dropdown-content li:hover{
+    background-color: #eee;
 }
 
 /* Dropdown css end */
@@ -411,6 +443,8 @@ tbody tr{
     width: 319px;
     background: #fff;
     padding: 20px 15px;
+    z-index: 999;
+    border: 1px solid rgba(0, 0, 0, 0.20);
 }
 .NotificationTitle {
     font-size: 16px;
@@ -487,9 +521,12 @@ tbody tr{
 }
 .CustomizeOption {
     text-transform: uppercase;
-    border: #1BA89D solid 1px;
     padding: 5px 10px;
     border-radius: 6px;
+    
+}
+.CustomizeOption:hover {
+    color:#38B87C;
 }
 .CustomizeOption:hover {
     cursor: pointer;
@@ -541,6 +578,11 @@ tbody tr{
 }
 
 /* NewCustomizeCSS */
+.CusProdListCont{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 .CustProdCard{
     display: flex;
     gap: 20px;
@@ -594,6 +636,7 @@ tbody tr{
 .QuoteNowBtn {
     padding: 7px 18px;
     background-color: #A6DFC7;
+    cursor: pointer;
 }
 
 /* Search Input CSS */
@@ -613,7 +656,7 @@ tbody tr{
 .search-icon {
     font-size: 20px;
     display: flex;
-    background-color: #A6DFC7;
+    background-color: #00A79D;
     padding: 10px 6px;
     border-radius: 0px 5px 5px 0px;    
 }
@@ -662,9 +705,12 @@ tbody tr{
     font-size: 12px;
 }
 .dashboardrow2 .dashboard_navigation{
-    background-color: #A6DFC7;
+    background-color: #fff;
     height: 44px;
     align-items: center;
+    position: relative;
+    z-index: -1;
+    left: -6%;
 }
 .dashboardrow2 .dashboard_navigation a{
     color: rgba(32, 34, 36, 0.80);
@@ -721,3 +767,439 @@ tbody tr{
     margin-top: 25px;
 }
 
+/* New Dashboard Topbar */
+
+.DashboardRow {
+    display: flex;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.20);
+}
+.DashRowCol1 {
+    display: flex;
+    align-items: center;
+    flex: 0 0 13%;
+}
+.DashRowCol2 {
+    width: 100%;
+}
+.DashSearchLoc {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.arqonzlogo {
+    padding: 16px 39px;
+}
+.search-container {
+    width: 53.5vw;
+}
+.search-icon {
+    cursor: pointer;
+}
+.dashboard_navigation ul li a{
+    cursor: pointer;
+}
+
+.DashMainNav1 .dashboard_navigation {
+    background-color: #fff;
+    height: 44px;
+    align-items: center;
+}
+.DashMainNav1 .dashboard_navigation > ul{
+    display: flex;
+    min-height: 68px;
+    justify-content: center;
+    align-items: center;
+    gap: 26px;
+}
+.DashMainNav1 .dashboard_navigation a {
+    color: rgba(32, 34, 36, 0.80);
+    font-size: 18px;
+    font-weight: 500;
+}
+.download-quote-btn {
+    cursor: pointer;
+}
+
+
+/* Popup Form */
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.popup-content {
+    background-color: #fff;
+    margin: 8% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#quoteForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#quoteForm div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#quoteForm label {
+    font-weight: bold;
+}
+#quoteForm input[readonly] {
+    color: #888;
+}
+
+#quoteForm input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#quoteForm button {
+    padding: 10px 20px;
+    background-color: #1BA89D;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#quoteForm button:hover {
+    background-color: #0d8a6c;
+}
+
+#quoteSuccess {
+    text-align: center;
+    font-weight: bold;
+    color: #1BA89D;
+    margin-top: 20px;
+}
+
+
+/* Edit Bid Form */
+.Edit-popup {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.Edit-popup-content {
+    background-color: #fff;
+    margin: 8% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.Edit-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.Edit-close:hover,
+.Edit-close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#Edit-quoteForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#Edit-quoteForm div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#Edit-quoteForm label {
+    font-weight: bold;
+}
+#Edit-quoteForm input[readonly] {
+    color: #888;
+}
+
+#Edit-quoteForm input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#Edit-quoteForm button {
+    padding: 10px 20px;
+    background-color: #1BA89D;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#Edit-quoteForm button:hover {
+    background-color: #0d8a6c;
+}
+
+#Edit-quoteSuccess {
+    text-align: center;
+    font-weight: bold;
+    color: #1BA89D;
+    margin-top: 20px;
+}
+
+
+
+
+
+.ImpsupplierChoice {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+}
+
+.yesAccepted{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #00A79D;
+    gap: 3px;
+    cursor: pointer;
+    min-height: 49.5px;
+}
+
+.NoRejected {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgba(32, 34, 36, 0.70);
+    gap: 3px;
+    cursor: pointer;
+}
+
+/* Bid Recieved table */
+.RecievedBidTable {
+    border-collapse: collapse;
+}
+
+.RecievedBidTable th {
+    padding: 4px 32px;
+    border: 1px solid rgba(0, 0, 0, 0.20);
+    width: 8.2%;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 600;
+}
+.RecievedBidTable td {
+    text-align: center;
+    height: 85px;
+    
+}
+.RecievedBids { 
+    padding-top: 13px;
+    padding-bottom: 55px;
+    padding-left: 4px;
+    padding-right: 4px;
+    
+    background-color: #fff;
+    border-left: solid 1px #DDDDDD;
+    border-right: solid 1px #DDDDDD;
+    border-bottom: solid 1px #DDDDDD;
+}
+.bidamt {
+    cursor: pointer;
+}
+.bidamt:hover {
+    border: 1px solid #38B87C;
+    background: #F0F9F9;
+    box-shadow: 4px 4px 24px 0px rgba(0, 0, 0, 0.25);
+}
+.selected-bid {
+    border: 1px solid #38B87C;
+    background: #F0F9F9;
+    box-shadow: 4px 4px 24px 0px rgba(0, 0, 0, 0.25);
+}
+.non-clickable {
+    cursor: default;
+    pointer-events: none;
+}
+
+/* Timer CSS */
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+                            
+.countdown-container {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+.countdown-timer {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    font-family: 'Share Tech Mono', monospace;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.time-section {
+    background: #00A79D;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    
+}
+
+.time-number {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    transition: transform 0.5s;
+}
+
+.time-label {
+    font-size: 1rem;
+}
+
+.time-number {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Timer CSS Ends */
+
+
+/* Dashboard Projects Page CSS */
+
+
+.dashboard-projects {
+    text-align: left;
+    font-family: Poppins;
+    font-size: 16px;
+    line-height: 25px;
+    font-weight: 600;
+    position: relative;
+
+}
+.Breadcrumb-active {
+    color: rgba(32, 34, 36);
+    font-family: "Poppins-SemiBold", sans-serif;
+    font-size: 16px;
+    line-height: 25px;
+    font-weight: 600;
+}
+.Breadcrumb-nonactive a {
+    color: rgba(32, 34, 36, 0.70);
+    font-family: "Poppins-SemiBold", sans-serif;
+    font-size: 16px;
+    line-height: 25px;
+    font-weight: 600;
+}
+.breadcrumb-divider {
+    margin: 0px 4px;
+    color: rgba(32, 34, 36, 0.70);
+}
+
+
+.line-8 {
+    margin: 8px 0px;
+    border-style: solid;
+    border-color: rgba(32, 34, 36, 0.2);
+    border-width: 1px 0 0 0;
+    align-self: stretch;
+    flex-shrink: 0;
+    height: 0px;
+    position: relative;
+}
+.DashProjectsListSection {
+    display: flex;
+    gap: 7px;
+    margin-top: 10px;
+    margin-bottom: 41px;
+    margin-left: -12px;
+}
+.DashprojectfeaturedImg img{
+    border-radius: 14px;
+}
+.DashprojectLocation {
+    display: flex;
+    justify-content: space-between;
+}
+.DashprojectLocation .pleftcol {
+    display: flex;
+}
+.Dashprojecttitle h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #202;
+    margin: 5px 0px;
+}
+.DashprojectLocation p {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(32, 34, 36, 0.80);
+}
+.Projectssinglecontainer {
+    padding: 5px;
+    width: 272px;
+}
+
+
+
+
+
+/* Ends here */

@@ -48,6 +48,45 @@ class AddProductFormType extends AbstractType
                 ],
                 'required' => true,
             ])
+        
+            ->add('ProductBrand', TextType::class, [
+                'label' => 'Product Brand: ',
+                'attr' => [
+                    'maxlength' => 190,
+                ],
+                'required' => true,
+            ])
+            ->add('ProductMaterial', TextAreaType::class, [
+                'label' => 'Product Material: ',
+                'attr' => [
+                    'maxlength' => 190,
+                    'title' => 'Add Materials separated by comma (,)',
+                ],
+                'required' => true,
+            ])
+            ->add('ProductPrice', TextType::class, [
+                'label' => 'Product Price: ',
+                'attr' => [
+                    'maxlength' => 190,
+                ],
+                'required' => true,
+            ])
+            ->add('ProductUnit', TextType::class, [
+                'label' => 'Product Unit: ',
+                'attr' => [
+                    'maxlength' => 190,
+                ],
+                'required' => true,
+            ])
+
+            ->add('ProductDescription', TextareaType::class, [
+                'label' => 'Product Description: ',
+                'attr' => [
+                    'maxlength' => 1000,
+                    'style' => 'height: 150px;',
+                ],
+                'required' => true,
+            ])
             ->add('ProductDescription', TextareaType::class, [
                 'label' => 'Product Description: ',
                 'attr' => [
@@ -64,7 +103,7 @@ class AddProductFormType extends AbstractType
                 'required' => false,
                 'constraints' => [
                     new File([
-                        'maxSize' => '300k',
+                        'maxSize' => '3000k',
                         'mimeTypes' => [
                             'image/png',
                             'image/jpeg',
@@ -75,6 +114,14 @@ class AddProductFormType extends AbstractType
                     ]),
                 ],
                 'help' => 'Maximum file size: 300KB. Allowed file types: png, jpg, jpeg, gif.',
+            ])
+            ->add('ProductTags', TextAreaType::class, [
+                'label' => 'Product Tags: ',
+                'attr' => [
+                    'maxlength' => 190,
+                    'title' => 'Add keywords separated by comma (,) which users are likely to search to find this product',
+                ],
+                'required' => true,
             ])
             ->add('Specifications', TextareaType::class, [
                 'label' => 'Specifications: ',

@@ -15,10 +15,13 @@
  * - ProRequirementProduct [reverseObjectRelation]
  * - ProProposal [reverseObjectRelation]
  * - ProProposalBid [reverseObjectRelation]
- * - ExpireDate [date]
+ * - ExpireDate [datetime]
  * - ExpiryCheck [calculatedValue]
  * - Status [input]
  * - ProfessionalPath [calculatedValue]
+ * - ObjKey [calculatedValue]
+ * - ObjeKey [input]
+ * - Location [input]
  */
 
 return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
@@ -28,7 +31,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'title' => '',
    'description' => '',
    'creationDate' => NULL,
-   'modificationDate' => 1718541300,
+   'modificationDate' => 1721882073,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -428,7 +431,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'lazyLoading' => true,
           )),
           10 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\Date::__set_state(array(
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Datetime::__set_state(array(
              'name' => 'ExpireDate',
              'title' => 'Expire Date',
              'tooltip' => '',
@@ -532,6 +535,92 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'calculatorClass' => '@App\\Controller\\ProfessionalPathCalculator',
              'columnLength' => 190,
              'width' => '',
+          )),
+          14 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\CalculatedValue::__set_state(array(
+             'name' => 'ObjKey',
+             'title' => 'Obj Key',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'elementType' => 'input',
+             'calculatorType' => 'class',
+             'calculatorExpression' => '',
+             'calculatorClass' => '@App\\Controller\\KeyCalculator',
+             'columnLength' => 190,
+             'width' => '',
+          )),
+          15 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'ObjeKey',
+             'title' => 'Obje Key',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => NULL,
+             'columnLength' => 190,
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
+             'unique' => false,
+             'showCharCount' => false,
+             'width' => '',
+             'defaultValueGenerator' => '',
+          )),
+          16 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'Location',
+             'title' => 'Location',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => NULL,
+             'columnLength' => 190,
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
+             'unique' => false,
+             'showCharCount' => false,
+             'width' => '',
+             'defaultValueGenerator' => '',
           )),
         ),
          'locked' => false,

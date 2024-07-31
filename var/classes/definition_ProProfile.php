@@ -19,6 +19,7 @@
  * - Products [reverseObjectRelation]
  * - Proposals [reverseObjectRelation]
  * - Requirements [reverseObjectRelation]
+ * - SupplierPinnedNotification [reverseObjectRelation]
  * - Brands [textarea]
  * - ProfileImage [image]
  * - ProfileGallery [imageGallery]
@@ -50,7 +51,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'title' => '',
    'description' => '',
    'creationDate' => NULL,
-   'modificationDate' => 1718011501,
+   'modificationDate' => 1721882687,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -621,6 +622,46 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
                      'lazyLoading' => true,
                   )),
                   14 => 
+                  \Pimcore\Model\DataObject\ClassDefinition\Data\ReverseObjectRelation::__set_state(array(
+                     'name' => 'SupplierPinnedNotification',
+                     'title' => 'Supplier Pinned Notification',
+                     'tooltip' => '',
+                     'mandatory' => false,
+                     'noteditable' => false,
+                     'index' => false,
+                     'locked' => false,
+                     'style' => '',
+                     'permissions' => NULL,
+                     'fieldtype' => '',
+                     'relationType' => true,
+                     'invisible' => false,
+                     'visibleGridView' => false,
+                     'visibleSearch' => false,
+                     'blockedVarsForExport' => 
+                    array (
+                    ),
+                     'classes' => 
+                    array (
+                    ),
+                     'displayMode' => NULL,
+                     'pathFormatterClass' => '',
+                     'maxItems' => NULL,
+                     'visibleFields' => 'id,ProductName,ProductQuantity,ProductUnit,published',
+                     'allowToCreateNewObject' => false,
+                     'allowToClearRelation' => true,
+                     'optimizedAdminLoading' => false,
+                     'enableTextSelection' => false,
+                     'visibleFieldDefinitions' => 
+                    array (
+                    ),
+                     'width' => '',
+                     'height' => '',
+                     'ownerClassName' => 'SupplierPinnedNotification',
+                     'ownerClassId' => NULL,
+                     'ownerFieldName' => 'Supplier',
+                     'lazyLoading' => true,
+                  )),
+                  15 => 
                   \Pimcore\Model\DataObject\ClassDefinition\Data\Textarea::__set_state(array(
                      'name' => 'Brands',
                      'title' => 'Brands',

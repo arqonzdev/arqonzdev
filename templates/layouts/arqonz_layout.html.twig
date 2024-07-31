@@ -84,7 +84,7 @@
             {% set document = pimcore_document(1) %}
         {% endif %}
 
-        <nav class="navbar navbar-expand-md navbar-dark sticky-top py-1 site-header {{ document.getProperty('header_color') }}">
+        <nav class="navbar navbar-expand-md navbar-dark py-1 site-header {{ document.getProperty('header_color') }}">
 
             {# get the document which should be used to start in navigation | default home #}
             {% set navStartNode = document.getProperty('navigation_root') %}

@@ -495,6 +495,7 @@ main h1{
     right:0;
     background-color: #EFF1F3;
     display:none;
+    z-index: 99999;
 }
 /* .arqonz-nav ul li:hover ul{
     display:block;
@@ -593,6 +594,7 @@ main h1{
     top: 100%;
     background-color: #fff;
     padding: 10px;
+    z-index: 99999;
 }
 .notifications a{
     padding:0 !important;

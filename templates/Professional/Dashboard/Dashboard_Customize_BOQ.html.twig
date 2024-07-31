@@ -1,133 +1,221 @@
 {% extends 'layouts/UserDashboard_layout.html.twig' %}
 
 {% block content %}
-    <div class="BOQ-products">
-        <h2>BOQ Listing</h2>
-        <div class="sortRowoptions">
-            <div class="productsFound">
-                <p><b>261 Products</b> found</p>
+
+<div class="BOQ-products">
+    <h2>BOQ Listing</h2>
+    <div class="sortRowoptions">
+        <div class="productsFound">
+            <p><b>{{ ProRequirementProducts|length }} Products</b> found</p>
+        </div>
+        <div class="SortByCols">
+            <div class="SortCol Sorttxt">
+                <p><b>SORT BY</b></p>
             </div>
-            <div class="SortByCols">
-                <div class="SortCol Sorttxt">
-                    <p><b>SORT BY</b></p>
-                </div>
-                <div class="SortCol unit">
-                    <p>UNIT</p>
-                </div>
-                <div class="SortCol Size">
-                    <p>Size</p>
-                </div>
-                <div class="SortCol Qty">
-                    <p>Qty</p>
-                </div>
-                <div class="SortCol rating">
-                    <p>Rating</p>
-                </div>
-                <div class="SortCol price">
-                    <p>Price</p>
-                </div>
+            <div class="SortCol unit">
+                <p>UNIT</p>
+            </div>
+            <div class="SortCol Size">
+                <p>Spec</p>
+            </div>
+            <div class="SortCol Qty">
+                <p>Qty</p>
+            </div>
+            <div class="SortCol rating">
+                <p>Rating</p>
+            </div>
+            <div class="SortCol price">
+                <p>Price</p>
             </div>
         </div>
-
-        <div class="CustProdWrapper">
-            <div class="CustProdCard">
-                <div class="BOQProdCol1">
-                    <div class="BOQprodimage">
-                        <img src="/static/images/NewProdFeature.png" alt="BOQ_ProductImage">
-                    </div>
-                    
-                </div>
-                <div class="BOQProdRightCOL">
-                    <div class="BOQProdCol BOQProductMeta">
-                        <div class="prodnameBrand">
-                            <h3 class="BoqProdName">CEMENT</h3>
-                            <p class="currBrandName">Ambuja</p>
-                        </div>
-                        <div class="optionsicons">
-                        <img src="/static/icons/tagicon1.svg" alt="">
-                        <div class="livetracking">
-                            <img src="/static/icons/livetrackingIcon.svg" alt="">
-                        </div>
-                    </div>
-                    </div>
-                    <div class="BOQProdCol">
-                        <p class="BOQProdUnit">Bag</p>
-                    </div>
-                    <div class="BOQProdCol">
-                        <p class="BOQProdSize">50 Kg</p>
-                    </div>
-                    {# <div class="BOQProdCol">
-                        <p class="BOQProdCapacity">1000 bags/day</p>
-                    </div> #}
-                    <div class="BOQProdCol">
-                        <p class="BOQProdQuantity">5 Bags</p>
-                    </div>
-                    <div class="BOQProdCol">
-                        <p class="BOQProdPrice">4.6</p>
-                    </div>
-                    <div class="BOQProdCol">
-                        <p class="BOQProdStock">₹560/bag</p>
-                    </div>
-                    {# <div class="BOQProdCol">
-                        <p class="BOQProdStock">100 in Stock</p>
-                    </div> #}
-                    <div class="BOQCustomize_Options BOQCustomizeopts">
-                        <p class="CustomizeOption BOQCustomizeOption" data-option="brands">Available brands</p>
-                        <p class="CustomizeOption BOQCustomizeOption" data-option="specifications">Specifications</p>
-                        <p class="CustomizeOption BOQCustomizeOption" data-option="size">Available Size</p>
-                        <p class="QuoteNowBtn" >Quote Now</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="customizationDetails" data-type="brands" style="display: none;">
-                <!-- Content will be dynamically filled by JavaScript -->
-            </div>
-            <div class="customizationDetails" data-type="specifications" style="display: none;">
-                <!-- Content will be dynamically filled by JavaScript -->
-            </div>
-            <div class="customizationDetails" data-type="size" style="display: none;">
-                <!-- Content will be dynamically filled by JavaScript -->
-            </div>
-        </div>
-
-        
-        
-        {# <table class="requirements-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Product Name</th>
-                    <th>Category</th>
-                    <th>Quantity</th>
-                    <th>Reserve</th>
-                    <th>Min Dec</th>
-                    <th>Unit</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for product in ProRequirementProducts %}
-                    <tr class="requirement-item">
-                        <td>{{ product.getKey()|default('N/A') }}</td>
-                        <td>{{ product.getProductName()|default('N/A') }}</td>
-                        <td>{{ product.getProductCategory()|default('N/A') }}</td>
-                        <td>{{ product.getQuantity()|default('N/A') }}</td>
-                        <td>{{ product.getMinimumReserve()|default('N/A') }}</td>
-                        <td>{{ product.getMinDec()|default('N/A') }}</td>
-                        <td>{{ product.getUnit()|default('N/A') }}</td>
-                        <td>
-                            <button class="details-button" 
-                                data-productkey="{{ product|default('N/A') }}" 
-                                data-productname="{{ product.getProductName()|default('N/A') }}"  
-                                data-minimumreserve="{{ product.getMinimumReserve()|default('N/A') }}" 
-                                data-bidmindec="{{ product.getMinDec()|default('N/A') }}">BID</button>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table> #}
     </div>
+
+    <div class="CusProdListCont">
+        {% for product in ProRequirementProducts %}
+            <div class="CustProdWrapper">
+                <div class="CustProdCard">
+                    <div class="BOQProdCol1">
+                        <div class="BOQprodimage">
+                            <img src="/static/images/NewProdFeature.png" alt="BOQ_ProductImage">
+                        </div>
+                    </div>
+                    <div class="BOQProdRightCOL">
+                        <div class="BOQProdCol BOQProductMeta">
+                            <div class="prodnameBrand">
+                                <h3 class="BoqProdName">{{ product.getProductName() }}</h3>
+                                <p class="currBrandName currentBrand">{{ product.getBrand() }}</p>
+                            </div>
+                            <div class="optionsicons">
+                                <img src="/static/icons/tagicon1.svg" alt="">
+                                <div class="livetracking">
+                                    <img src="/static/icons/livetrackingIcon.svg" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="BOQProdCol">
+                            <p class="BOQProdUnit">{{ product.getUnit() }}</p>
+                        </div>
+                        <div class="BOQProdCol" style="display:none">
+                            <p class="BOQProdMaterial">{{ product.getMaterial() }}</p>
+                        </div>
+                        <div class="BOQProdCol">
+                            <p class="BOQProdSize currentSpec">{{ product.getQuantity() }} {{ product.getUnit() }}</p>
+                        </div>
+                        <div class="BOQProdCol">
+                            <p class="BOQProdQuantity">{{ product.getQuantity() }} {{ product.getUnit() }}</p>
+                        </div>
+                        <div class="BOQProdCol">
+                            <p class="BOQProdPrice">4.6</p> {# Replace with actual rating if available #}
+                        </div>
+                        <div class="BOQProdCol">
+                            <p class="BOQProdStock">₹560/bag</p> {# Replace with actual price if available #}
+                        </div>
+                        <div class="BOQCustomize_Options BOQCustomizeopts">
+                        {% set bids = product.getSupplierBid() %}
+                        {% if product.getQuoteStatus() != 'Started' %}
+                            <p class="CustomizeOption BOQCustomizeOption" data-option="brands">Available brands</p>
+                            <p class="CustomizeOption BOQCustomizeOption" data-option="specifications">Specifications</p>
+                            <p class="QuoteNowBtn" onclick="showQuotePopup(this, '{{ product.getFullPath() }}')">Quote Now</p>
+                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="customizationDetails" data-type="brands" style="display: none;">
+                    <!-- Content will be dynamically filled by JavaScript -->
+                </div>
+                <div class="customizationDetails" data-type="specifications" style="display: none;">
+                    <!-- Content will be dynamically filled by JavaScript -->
+                </div>
+                <div class="customizationDetails" data-type="size" style="display: none;">
+                    <!-- Content will be dynamically filled by JavaScript -->
+                </div>
+                
+                
+
+                {% if product.getQuoteStatus() == 'Started' %}
+                    <div class="RecievedBids" data-type="Bids">
+                        <div class="countdown-container">
+                            CAMPAIGN ENDS IN {{ product.getEndDate().format("Y-m-d H:i:s") }}
+                            <div id="countdown-timer-{{ loop.index }}" class="countdown-timer" data-end-date="{{ product.getEndDate().format("Y-m-d H:i:s") }}">
+                                <div class="time-section">
+                                    <span class="time-number days">00</span>
+                                    <span class="time-label">Days</span>
+                                </div>
+                                <div class="time-section">
+                                    <span class="time-number hours">00</span>
+                                    <span class="time-label">Hours</span>
+                                </div>
+                                <div class="time-section">
+                                    <span class="time-number minutes">00</span>
+                                    <span class="time-label">Minutes</span>
+                                </div>
+                                <div class="time-section">
+                                    <span class="time-number seconds">00</span>
+                                    <span class="time-label">Seconds</span>
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                        
+
+                        
+                        {% if bids is not empty %}
+                            <table class="RecievedBidTable">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th> 
+                                        <th>Specification</th>
+                                        <th>Qty</th>
+                                        <th>Unit</th>
+                                        <th>L1</th>
+                                        <th>L2</th>
+                                        <th>L3</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% set bid_amounts = bids|map(bid => bid.getBidAmount()) %}
+                                    {% set lowest = 999999999999999 %}
+                                    {% set second_lowest = 999999999999999 %}
+                                    {% set third_lowest = 999999999999999 %}
+
+                                    {% for amount in bid_amounts %}
+                                        {% if amount < lowest %}
+                                            {% set third_lowest = second_lowest %}
+                                            {% set second_lowest = lowest %}
+                                            {% set lowest = amount %}
+                                        {% elseif amount > lowest and amount < second_lowest  %}
+                                        {# {% elseif amount < second_lowest %} #}
+                                            {% set third_lowest = second_lowest %}
+                                            {% set second_lowest = amount %}
+                                        {% elseif amount > second_lowest and amount < third_lowest  %}
+                                            {% set third_lowest = amount %}
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% set lowest_bid = bids|filter(bid => bid.getBidAmount() == lowest)|first %}
+                                    
+                                    {% set second_lowest_bid = bids|filter(bid => bid.getBidAmount() == second_lowest)|first %}
+                                    
+                                    {% set third_lowest_bid = bids|filter(bid => bid.getBidAmount() == third_lowest)|first %}
+                                    
+
+                                    <tr>
+                                        <td>{{ product.getProductName() }}</td>
+                                        <td>{{ product.getMaterial() }}</td>
+                                        <td>{{ product.getQuantity() }}</td>
+                                        <td>{{ product.getUnit() }}</td>
+                                        <td class="L1Bid bidamt" data-key="{{ lowest_bid ? lowest_bid.getKey() : '' }}">{{ lowest }}</td>
+                                        <td class="L2Bid bidamt" data-key="{{ second_lowest != lowest and second_lowest_bid ? second_lowest_bid.getKey() : '' }}">{{ second_lowest != 999999999999999 ? second_lowest : '-' }}</td>
+                                        <td class="L3Bid bidamt" data-key="{{ third_lowest != second_lowest and third_lowest != lowest and third_lowest_bid ? third_lowest_bid.getKey() : '' }}">{{ third_lowest != 999999999999999  ? third_lowest : '-' }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function startCountdown(endTime, elementId) {
+                function updateCountdown() {
+                    const now = new Date().getTime();
+                    const distance = endTime - now;
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    const timerElement = document.getElementById(elementId);
+                    if (timerElement) {
+                        timerElement.querySelector('.days').innerText = String(days).padStart(2, '0');
+                        timerElement.querySelector('.hours').innerText = String(hours).padStart(2, '0');
+                        timerElement.querySelector('.minutes').innerText = String(minutes).padStart(2, '0');
+                        timerElement.querySelector('.seconds').innerText = String(seconds).padStart(2, '0');
+
+                        if (distance < 0) {
+                            clearInterval(timerInterval);
+                            timerElement.innerHTML = "EXPIRED";
+                        }
+                    }
+                }
+
+                updateCountdown();
+                const timerInterval = setInterval(updateCountdown, 1000);
+            }
+
+            const countdownTimers = document.querySelectorAll('.countdown-timer');
+            countdownTimers.forEach(function(timerElement) {
+                const elementId = timerElement.id;
+                const endDateString = timerElement.getAttribute('data-end-date');
+                const endDate = new Date(endDateString.replace(' ', 'T') + 'Z').getTime();
+                startCountdown(endDate, elementId);
+            });
+        });
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -218,5 +306,156 @@
         });
     </script>
 
-    
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const bidElements = document.querySelectorAll('.bidamt');
+
+            bidElements.forEach(bid => {
+                // Add 'non-clickable' class if content is equal to "-"
+                if (bid.textContent.trim() === "-") {
+                    bid.classList.add('non-clickable');
+                }
+
+                bid.addEventListener('click', function() {
+                    // Only allow selection if the bid amount is not "-"
+                    if (this.textContent.trim() !== "-") {
+                        // Remove 'selected-bid' class from all bid elements
+                        bidElements.forEach(bid => bid.classList.remove('selected-bid'));
+
+                        // Add 'selected-bid' class to the clicked bid element
+                        this.classList.add('selected-bid');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- Quote Now Popup Form -->
+    <div id="quotePopup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closeQuotePopup()">&times;</span>
+            <h2 id="productName" class="currProductName">Product Name</h2>
+            <form id="quoteForm">
+                <div>
+                    <label for="brandName">Brand Name:</label>
+                    <input type="text" id="brandName" name="brandName" value="" placeholder="Current Brand">
+                </div>
+                <div>
+                    <label for="specification">Specification:</label>
+                    <input type="text" id="specification" name="specification" value="" placeholder="Current Specification">
+                </div>
+                <div>
+                    <label for="Material">Material:</label>
+                    <input type="text" id="Material" name="Material" value="" placeholder="Material">
+                </div>
+                <div>
+                    <label for="quantity">Quantity:</label>
+                    <input type="text" id="quantity" name="quantity" value="" placeholder="Quantity">
+                </div>
+                <div>
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" name="location" value="" placeholder="{{ ProRequirement.City()}}">
+                </div>
+                <div>
+                    <label for="expiryDate">Expiry Date:</label>
+                    <input type="datetime-local" id="expiryDate" name="expiryDate" value="{{ ProRequirement.getExpireDate()|date('Y-m-d\\TH:i', 'Asia/Kolkata') }}">
+                </div>
+                <input type="hidden" id="productUnit" name="productUnit" value="">
+                <input type="hidden" id="ProRequirementProductPath" name="ProRequirementProductPath" value="">
+                <input type="hidden" id="ProductMaterial" name="ProductMaterial" value="">
+                <button type="submit">Quote Now</button>
+            </form>
+            <div id="quoteSuccess" style="display: none;">
+                <p>Quote Started Successfully &#10003;</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showQuotePopup(button, productPath) {
+            var productCard = button.closest('.CustProdCard');
+            var productName = productCard.querySelector('.BoqProdName').textContent;
+            var productUnit = productCard.querySelector('.BOQProdUnit').textContent;
+            var currentBrand = productCard.querySelector('.currentBrand').textContent;
+            var currentQuantity = productCard.querySelector('.BOQProdQuantity').textContent;
+            var currentSpec = productCard.querySelector('.currentSpec').textContent;
+            var currentMaterial = productCard.querySelector('.BOQProdMaterial').textContent;
+            
+            
+
+            document.getElementById('productName').textContent = productName;
+            document.getElementById('brandName').placeholder = currentBrand;
+            document.getElementById('specification').placeholder = currentSpec;
+            document.getElementById('quantity').placeholder = currentQuantity;
+            document.getElementById('productUnit').value = productUnit;
+            document.getElementById('ProRequirementProductPath').value = productPath;
+            document.getElementById('Material').placeholder = currentMaterial;
+            
+
+            document.getElementById('quotePopup').style.display = 'block';
+        }
+
+        function closeQuotePopup() {
+            document.getElementById('quotePopup').style.display = 'none';
+            document.getElementById('quoteSuccess').style.display = 'none';
+            document.getElementById('quoteForm').style.display = 'flex';
+            document.getElementById('quoteForm').reset();
+        }
+
+        document.getElementById('quoteForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            var formData = new FormData(this);
+
+
+            // Populate fields with placeholder values if they are empty
+            if (formData.get('brandName') === '') {
+                formData.set('brandName', document.getElementById('brandName').placeholder);
+            }
+            if (formData.get('specification') === '') {
+                formData.set('specification', document.getElementById('specification').placeholder);
+            }
+            if (formData.get('Material') === '') {
+                formData.set('Material', document.getElementById('Material').placeholder);
+            }
+
+            formData.set('productName', document.getElementById('productName').textContent);
+            
+            formData.set('location', document.getElementById('location').placeholder);
+            
+
+            if (formData.get('quantity') === '') {
+                formData.set('quantity', document.getElementById('quantity').placeholder);
+            }
+
+            
+            // Repeat for other fields if needed
+
+            fetch('/supplier-pinned-notification', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('quoteForm').style.display = 'none';
+                    document.getElementById('quoteSuccess').style.display = 'block';
+                    setTimeout(() => {
+                        closeQuotePopup();
+                        location.reload(); // Refresh the page after closing the popup
+                    }, 2000);
+                } else {
+                    // Handle the error (optional)
+                    console.error('Error:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+
+</div>
+
 {% endblock %}
