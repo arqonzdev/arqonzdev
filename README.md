@@ -1,51 +1,49 @@
-# Demo and Blue Print Application for Pimcore
+# Welcome to Arqonz 🚀
 
-This demo package is intended to be used by Pimcore newcomers who want to learn Pimcore and see it in action. 
-It's tailored get an overview of Pimcores CMS, DAM, PIM and E-Commerce functionality and can be used as a blue print for 
-E-Commerce Applications built with Pimcore. If you are an experienced Pimcore developer, have a look at the Skeleton linked below instead.
+**Building Connections. Empowering the Construction Industry.**
 
-## Getting started 
-```bash
-COMPOSER_MEMORY_LIMIT=-1 composer create-project pimcore/demo my-project
-cd ./my-project
-./vendor/bin/pimcore-install
-```
+Arqonz is a technology-driven platform designed to connect professionals, businesses, and innovators across the Architecture, Engineering, Construction, and Real Estate industries.
 
-- Point your virtual host to `my-project/public` 
-- Open https://your-host/admin in your browser
-- Done! 😎
+Our mission is to simplify industry collaboration, create business opportunities, and accelerate digital transformation through technology.
 
+## 🌐 About Arqonz
 
-## Docker
+Through our digital ecosystem, we bring together:
 
-You can also use Docker to setup a new Pimcore Installation.
-You don't need to have a PHP environment with composer installed.
+- 🏗️ **Architecture & Construction** – Connecting architects, builders, contractors, and engineers.
+- 🏢 **Business Networking** – Helping companies and professionals discover opportunities and build meaningful connections.
+- 📋 **Business Opportunities** – Enabling collaboration through project requirements, enquiries, and RFQs.
+- 📚 **Knowledge & Resources** – Sharing industry insights, documents, and professional knowledge.
+- 💡 **Technology & Innovation** – Developing digital solutions for the evolving construction ecosystem.
 
-### Prerequisits
+## 🛠️ Technology
 
-* Your user must be allowed to run docker commands (directly or via sudo).
-* You must have docker-compose installed.
-* Your user must be allowed to change file permissions (directly or via sudo).
+Our development ecosystem uses modern technologies to build scalable and reliable digital solutions.
 
-### Follow these steps
+- Frontend: Next.js, React, TypeScript
+- Backend: Node.js, REST APIs
+- Database: PostgreSQL
+- Cloud & Infrastructure: Microsoft Azure
+- Version Control: Git & GitHub
 
-1. Initialize the demo project using the `pimcore/pimcore` image
-    ``docker run -u `id -u`:`id -g` --rm -v `pwd`:/var/www/html pimcore/pimcore:php8.2-latest composer create-project pimcore/demo my-project``
-1. Go to your new project
-    `cd my-project/`
-1. Part of the new project is a docker compose file
-    * Run `` echo `id -u`:`id -g` `` to retrieve your local user and group id
-    * Open the `docker-compose.yaml` file in an editor, uncomment all the `user: '1000:1000'` lines and update the ids if necessary
-    * Start the needed services with `docker compose up -d`
-1. Install pimcore and initialize the DB
-    `docker compose exec php vendor/bin/pimcore-install --mysql-host-socket=db --mysql-username=pimcore --mysql-password=pimcore --mysql-database=pimcore`
-    * When asked for admin user and password: Choose freely
-    * This can take a while, up to 20 minutes
-1. :heavy_check_mark: DONE - You can now visit your pimcore-demo:
-    * The frontend: <http://localhost>
-    * The admin interface, using the credentials you have chosen above:
-      <http://localhost/admin>
+## 📂 Our Development
 
+This organization hosts Arqonz's software development projects, including:
 
-## Other demo/skeleton packages
-- [Pimcore Skeleton](https://github.com/pimcore/skeleton/)
+- Website frontend
+- Backend APIs and services
+- Platform integrations
+- Internal tools and applications
+- New technology initiatives
+
+## 🤝 Connect With Us
+
+🌍 Website: https://arqonz.com
+
+📧 Contact: Contact us through our official website.
+
+---
+
+**Arqonz — Connecting the Construction Ecosystem.**
+
+© Arqonz. All rights reserved.
